@@ -258,7 +258,7 @@
 <script>
 const SUPABASE_URL = 'https://cpjbnjcwpmcvasechmwx.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwamJuamN3cG1jdmFzZWNobXd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxNTM1NTQsImV4cCI6MjEwMzcyOTU1NH0.DnmZh785ix4CnlmIyPnB93YrYyfOUZCdweeZQkXY8k8';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let session = null;
 let activeTab = 'feed';
@@ -269,9 +269,9 @@ const modalOverlay = document.getElementById('modal-overlay');
 const modalContent = document.getElementById('modal-content');
 
 async function initAuth() {
-  const { data } = await supabase.auth.getSession();
+  const { data } = await sb.auth.getSession();
   session = data.session;
-  supabase.auth.onAuthStateChange((_event, newSession) => {
+  sb.auth.onAuthStateChange((_event, newSession) => {
     session = newSession;
     render();
   });
@@ -279,7 +279,7 @@ async function initAuth() {
 }
 
 async function sendMagicLink(email) {
-  const { error } = await supabase.auth.signInWithOtp({
+  const { error } = await sb.auth.signInWithOtp({
     email,
     options: { emailRedirectTo: window.location.href }
   });
@@ -287,7 +287,7 @@ async function sendMagicLink(email) {
 }
 
 async function logout() {
-  await supabase.auth.signOut();
+  await sb.auth.signOut();
   session = null;
   render();
 }
@@ -362,7 +362,7 @@ async function loadFeed() {
   const content = document.getElementById('content');
   content.innerHTML = `<div class="empty-state">Loading...</div>`;
 
-  const { data: posts, error } = await supabase
+  const { data: posts, error } = await sb
     .from('posts')
     .select('id, title, description, user_id, category, profiles(username)')
     .order('created_at', { ascending: false })
@@ -421,7 +421,7 @@ function openNewPostModal() {
     const msg = document.getElementById('new-msg');
     if (!title) { msg.textContent = 'Title is required.'; msg.className = 'status-msg error'; return; }
 
-    const { error } = await supabase.from('posts').insert({
+    const { error } = await sb.from('posts').insert({
       user_id: session.user.id, title, description, category
     });
 
@@ -439,7 +439,7 @@ async function loadArena() {
   const content = document.getElementById('content');
   content.innerHTML = `<div class="empty-state">Loading...</div>`;
 
-  const { data: challenges, error } = await supabase
+  const { data: challenges, error } = await sb
     .from('challenges')
     .select(`
       id, element, votes_a, votes_b, status,
@@ -459,7 +459,7 @@ async function loadArena() {
     return;
   }
 
-  const { data: myVotes } = await supabase
+  const { data: myVotes } = await sb
     .from('votes')
     .select('challenge_id')
     .eq('voter_id', session.user.id);
@@ -500,7 +500,7 @@ async function loadArena() {
 }
 
 async function castVote(challengeId, option) {
-  const { error } = await supabase.from('votes').insert({
+  const { error } = await sb.from('votes').insert({
     challenge_id: challengeId, voter_id: session.user.id, option
   });
   if (error && error.code !== '23505') {
@@ -514,7 +514,7 @@ async function loadRecord() {
   const content = document.getElementById('content');
   content.innerHTML = `<div class="empty-state">Loading...</div>`;
 
-  const { data: profile, error: profileErr } = await supabase
+  const { data: profile, error: profileErr } = await sb
     .from('profiles')
     .select('username, score, trophies, rank')
     .eq('id', session.user.id)
@@ -525,7 +525,7 @@ async function loadRecord() {
     return;
   }
 
-  const { data: finished } = await supabase
+  const { data: finished } = await sb
     .from('challenges')
     .select('id, element, status, winner_id, challenger_id, opponent_id, postA:post_a_id(title), postB:post_b_id(title)')
     .or(`challenger_id.eq.${session.user.id},opponent_id.eq.${session.user.id}`)
@@ -576,7 +576,7 @@ function openChallengeModal(opponentPostId, opponentId) {
     const msg = document.getElementById('challenge-msg');
     if (!element) { msg.textContent = 'Say what you\'re settling.'; msg.className = 'status-msg error'; return; }
 
-    const { data: myPosts } = await supabase
+    const { data: myPosts } = await sb
       .from('posts')
       .select('id')
       .eq('user_id', session.user.id)
@@ -588,7 +588,7 @@ function openChallengeModal(opponentPostId, opponentId) {
       return;
     }
 
-    const { error } = await supabase.from('challenges').insert({
+    const { error } = await sb.from('challenges').insert({
       challenger_id: session.user.id,
       opponent_id: opponentId,
       post_a_id: opponentPostId,
