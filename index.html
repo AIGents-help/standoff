@@ -157,6 +157,35 @@
     border: 1px solid #333338;
   }
 
+  .email-input {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.9rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #333338;
+    background: var(--panel-a);
+    color: var(--text);
+    min-width: 240px;
+    outline: none;
+  }
+
+  .email-input:focus { border-color: var(--accent); }
+
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: default;
+    transform: none;
+  }
+
+  .waitlist-msg {
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+    min-height: 1.2rem;
+  }
+
+  .waitlist-msg.success { color: #4ADE80; }
+  .waitlist-msg.error { color: var(--accent); }
+
   /* ---------- HOW IT WORKS ---------- */
   .how {
     max-width: 720px;
@@ -229,10 +258,18 @@
     <div class="hero-content">
       <div class="wordmark">Stand<span>Off</span></div>
       <p class="tagline">Post what you own. Put it up against someone else's. Let the crowd decide who's actually got it.</p>
-      <div class="cta-row">
-        <a href="#" class="btn btn-primary">Get notified at launch</a>
-        <a href="#how" class="btn btn-secondary">How it works</a>
-      </div>
+      <form id="waitlist-form" class="cta-row" onsubmit="return false;">
+        <input
+          type="email"
+          id="waitlist-email"
+          placeholder="your@email.com"
+          required
+          class="email-input"
+        />
+        <button type="submit" id="waitlist-btn" class="btn btn-primary">Get notified at launch</button>
+      </form>
+      <div id="waitlist-msg" class="waitlist-msg"></div>
+      <a href="#how" class="btn btn-secondary" style="margin-top: 0.75rem;">How it works</a>
     </div>
   </div>
 
@@ -257,6 +294,52 @@
     <a href="/terms">Terms</a>
     <a href="/support">Support</a>
   </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Replace with your real project values (Supabase dashboard > Settings > API).
+    // The anon/public key is safe to expose client-side — RLS on the
+    // `waitlist` table (insert-only, no select) is what keeps this secure.
+    const SUPABASE_URL = 'https://cpjbnjcwpmcvasechmwx.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwamJuamN3cG1jdmFzZWNobXd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxNTM1NTQsImV4cCI6MjEwMzcyOTU1NH0.DnmZh785ix4CnlmIyPnB93YrYyfOUZCdweeZQkXY8k8';
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form = document.getElementById('waitlist-form');
+    const emailInput = document.getElementById('waitlist-email');
+    const btn = document.getElementById('waitlist-btn');
+    const msg = document.getElementById('waitlist-msg');
+
+    form.addEventListener('submit', async () => {
+      const email = emailInput.value.trim();
+      if (!email) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Joining...';
+      msg.textContent = '';
+      msg.className = 'waitlist-msg';
+
+      const { error } = await supabase.from('waitlist').insert({ email });
+
+      if (error) {
+        // Unique constraint violation = already signed up; treat as success.
+        if (error.code === '23505') {
+          msg.textContent = "You're already on the list.";
+          msg.classList.add('success');
+        } else {
+          msg.textContent = 'Something went wrong — try again.';
+          msg.classList.add('error');
+        }
+      } else {
+        msg.textContent = "You're in. We'll email you at launch.";
+        msg.classList.add('success');
+        emailInput.value = '';
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Get notified at launch';
+    });
+  </script>
 
 </body>
 </html>
