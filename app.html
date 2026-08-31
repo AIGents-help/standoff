@@ -96,6 +96,7 @@
 
   .btn-primary { background: var(--accent); color: #fff; }
   .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
+  .btn-sm { padding: 0.55rem 0.9rem; font-size: 0.78rem; width: auto; }
 
   .status-msg { font-size: 0.85rem; margin-top: 0.75rem; min-height: 1.2rem; }
   .status-msg.success { color: var(--win); }
@@ -167,6 +168,56 @@
     color: var(--text-dim);
     padding: 3rem 1rem;
     font-size: 0.9rem;
+  }
+
+  .belt-card {
+    background: linear-gradient(135deg, #1c1710, #16161A);
+    border: 1px solid #3a2e12;
+    border-radius: 12px;
+    padding: 0.9rem;
+    margin-bottom: 0.7rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .belt-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    background: rgba(255,201,74,0.1);
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .belt-info { flex: 1; min-width: 0; }
+  .belt-category {
+    font-size: 0.65rem; font-weight: 700; color: var(--gold);
+    text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.15rem;
+  }
+  .belt-champ { font-weight: 700; font-size: 0.85rem; }
+  .belt-item { font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.3rem; }
+  .belt-defense {
+    font-size: 0.65rem; color: var(--text-dim);
+    display: inline-block;
+    background: var(--panel-2);
+    padding: 0.15rem 0.45rem;
+    border-radius: 10px;
+  }
+  .belt-defense.untested { color: var(--gold); border: 1px solid var(--gold); background: transparent; }
+  .belt-challenge-btn {
+    flex-shrink: 0;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
   }
 
   .post-card {
@@ -657,6 +708,11 @@ async function loadLeaderboard() {
   const content = document.getElementById('content');
   content.innerHTML = `<div class="empty-state">Loading...</div>`;
 
+  const { data: belts } = await sb
+    .from('belts')
+    .select('category, defense_count, is_sample, current_holder_post_id, current_holder_user_id, holder:profiles!current_holder_user_id(username), item:posts!current_holder_post_id(title)')
+    .order('category', { ascending: true });
+
   const { data: profiles, error } = await sb
     .from('profiles')
     .select('id, username, score, trophies, rank')
@@ -667,6 +723,22 @@ async function loadLeaderboard() {
     content.innerHTML = `<div class="empty-state">Couldn't load the leaderboard. ${error.message}</div>`;
     return;
   }
+
+  const beltIcons = { 'Cars': '🏎️', 'Homes': '🏡', 'Motorcycles': '🏍️', 'Timepieces': '⏱️', 'Custom Gear': '🔥' };
+
+  const beltsHtml = (belts || []).map(b => `
+    <div class="belt-card">
+      <div class="belt-icon">${beltIcons[b.category] || '🏆'}</div>
+      <div class="belt-info">
+        <div class="belt-category">${escapeHtml(b.category)} Champion</div>
+        <div class="belt-champ">@${escapeHtml(b.holder?.username || 'unknown')}</div>
+        <div class="belt-item">${escapeHtml(b.item?.title || '')}</div>
+        <span class="belt-defense ${b.defense_count === 0 ? 'untested' : ''}">${b.defense_count === 0 ? 'Undefeated — never challenged' : b.defense_count + ' successful defense' + (b.defense_count === 1 ? '' : 's')}</span>
+      </div>
+      <button class="belt-challenge-btn" data-post-id="${b.current_holder_post_id}" data-owner-id="${b.current_holder_user_id}">Challenge</button>
+    </div>
+  `).join('');
+
   if (!profiles.length) {
     content.innerHTML = `<div class="empty-state">No one on the board yet.</div>`;
     return;
@@ -694,11 +766,20 @@ async function loadLeaderboard() {
 
   content.innerHTML = `
     <div class="section-header">
+      <div class="section-title">Championship Belts</div>
+      <div class="section-sub">One per category</div>
+    </div>
+    ${beltsHtml}
+    <div class="section-header" style="margin-top: 1.4rem;">
       <div class="section-title">Leaderboard</div>
       <div class="section-sub">Top ${profiles.length}</div>
     </div>
     ${rowsHtml}
   `;
+
+  content.querySelectorAll('.belt-challenge-btn').forEach(btn => {
+    btn.addEventListener('click', () => openChallengeModal(btn.dataset.postId, btn.dataset.ownerId));
+  });
 }
 
 async function loadRecord() {
