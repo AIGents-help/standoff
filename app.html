@@ -16,6 +16,9 @@
     --accent: #FF3D2E;
     --border: #26262B;
     --win: #4ADE80;
+    --gold: #FFC94A;
+    --silver: #C7CDD6;
+    --bronze: #D98A5B;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -144,6 +147,21 @@
     padding: 1rem 1.1rem 5rem;
   }
 
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.9rem;
+  }
+  .section-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1rem;
+  }
+  .section-sub {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+
   .empty-state {
     text-align: center;
     color: var(--text-dim);
@@ -203,6 +221,12 @@
     text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.6rem;
     padding-right: 4.5rem;
   }
+  .arena-timer {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    margin-bottom: 0.6rem;
+  }
+  .arena-timer.urgent { color: var(--accent); font-weight: 600; }
   .arena-matchup { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.7rem; }
   .arena-side { flex: 1; text-align: center; }
   .arena-thumb {
@@ -224,6 +248,40 @@
   .vote-btn:hover { border-color: var(--accent); }
   .vote-btn:disabled { opacity: 0.4; cursor: default; }
   .voted-tag { font-size: 0.72rem; color: var(--win); text-align: center; }
+
+  .lb-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0.6rem;
+    border-radius: 10px;
+    margin-bottom: 0.4rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+  }
+  .lb-row.me { border-color: var(--accent); background: rgba(255,61,46,0.08); }
+  .lb-rank {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    width: 28px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .lb-rank.gold { color: var(--gold); }
+  .lb-rank.silver { color: var(--silver); }
+  .lb-rank.bronze { color: var(--bronze); }
+  .lb-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF3D2E, #B8281C);
+    flex-shrink: 0;
+  }
+  .lb-info { flex: 1; min-width: 0; }
+  .lb-name { font-weight: 700; font-size: 0.85rem; }
+  .lb-tier { font-size: 0.65rem; color: var(--accent); font-weight: 600; text-transform: uppercase; }
+  .lb-score { text-align: right; }
+  .lb-score-num { font-family: 'Archivo Black', sans-serif; font-size: 0.9rem; }
+  .lb-score-label { font-size: 0.6rem; color: var(--text-dim); }
 
   .profile-head { text-align: center; padding: 1rem 0 1.2rem; }
   .avatar {
@@ -255,7 +313,7 @@
   }
   .tab {
     flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-    padding: 0.7rem 0; font-size: 0.7rem; color: var(--text-dim); font-weight: 600;
+    padding: 0.7rem 0; font-size: 0.65rem; color: var(--text-dim); font-weight: 600;
     background: none; border: none; cursor: pointer;
   }
   .tab.active { color: var(--accent); }
@@ -404,6 +462,7 @@ function renderApp() {
     <div class="tabbar">
       <button class="tab ${activeTab === 'feed' ? 'active' : ''}" data-tab="feed">Feed</button>
       <button class="tab ${activeTab === 'arena' ? 'active' : ''}" data-tab="arena">Arena</button>
+      <button class="tab ${activeTab === 'leaderboard' ? 'active' : ''}" data-tab="leaderboard">Board</button>
       <button class="tab ${activeTab === 'record' ? 'active' : ''}" data-tab="record">Record</button>
     </div>
   `;
@@ -416,6 +475,7 @@ function renderApp() {
 
   if (activeTab === 'feed') loadFeed();
   if (activeTab === 'arena') loadArena();
+  if (activeTab === 'leaderboard') loadLeaderboard();
   if (activeTab === 'record') loadRecord();
 }
 
@@ -497,6 +557,16 @@ function openNewPostModal() {
   });
 }
 
+function formatTimeLeft(expiresAt) {
+  const diffMs = new Date(expiresAt).getTime() - Date.now();
+  if (diffMs <= 0) return { text: 'Closing now', urgent: true };
+  const hours = Math.floor(diffMs / (1000 * 60 * 60));
+  const days = Math.floor(hours / 24);
+  if (days >= 1) return { text: `${days}d ${hours % 24}h left`, urgent: false };
+  const mins = Math.floor((diffMs / (1000 * 60)) % 60);
+  return { text: `${hours}h ${mins}m left`, urgent: hours < 6 };
+}
+
 async function loadArena() {
   const content = document.getElementById('content');
   content.innerHTML = `<div class="empty-state">Loading...</div>`;
@@ -504,13 +574,13 @@ async function loadArena() {
   const { data: challenges, error } = await sb
     .from('challenges')
     .select(`
-      id, element, votes_a, votes_b, status, is_sample,
+      id, element, votes_a, votes_b, status, is_sample, expires_at,
       postA:post_a_id ( title ),
       postB:post_b_id ( title )
     `)
     .eq('status', 'Active')
-    .order('created_at', { ascending: false })
-    .limit(20);
+    .order('expires_at', { ascending: true })
+    .limit(30);
 
   if (error) {
     content.innerHTML = `<div class="empty-state">Couldn't load the arena. ${error.message}</div>`;
@@ -527,15 +597,17 @@ async function loadArena() {
     .eq('voter_id', session.user.id);
   myVotedChallengeIds = new Set((myVotes || []).map(v => v.challenge_id));
 
-  content.innerHTML = challenges.map(c => {
+  const listHtml = challenges.map(c => {
     const total = (c.votes_a || 0) + (c.votes_b || 0);
     const pctA = total ? Math.round((c.votes_a / total) * 100) : 50;
     const pctB = 100 - pctA;
     const voted = myVotedChallengeIds.has(c.id);
+    const timer = formatTimeLeft(c.expires_at);
     return `
       <div class="arena-card">
         ${c.is_sample ? '<div class="sample-badge">Sample</div>' : ''}
         <div class="arena-element">${escapeHtml(c.element)}</div>
+        <div class="arena-timer ${timer.urgent ? 'urgent' : ''}">⏱ ${timer.text}</div>
         <div class="arena-matchup">
           <div class="arena-side"><div class="arena-thumb"></div><div class="arena-side-name">${escapeHtml(c.postA?.title || 'Post A')}</div></div>
           <div class="arena-vs">VS</div>
@@ -557,6 +629,14 @@ async function loadArena() {
     `;
   }).join('');
 
+  content.innerHTML = `
+    <div class="section-header">
+      <div class="section-title">This Week</div>
+      <div class="section-sub">Soonest closing first</div>
+    </div>
+    ${listHtml}
+  `;
+
   content.querySelectorAll('.vote-btn').forEach(btn => {
     btn.addEventListener('click', () => castVote(btn.dataset.id, btn.dataset.opt));
   });
@@ -571,6 +651,54 @@ async function castVote(challengeId, option) {
     return;
   }
   loadArena();
+}
+
+async function loadLeaderboard() {
+  const content = document.getElementById('content');
+  content.innerHTML = `<div class="empty-state">Loading...</div>`;
+
+  const { data: profiles, error } = await sb
+    .from('profiles')
+    .select('id, username, score, trophies, rank')
+    .order('score', { ascending: false })
+    .limit(50);
+
+  if (error) {
+    content.innerHTML = `<div class="empty-state">Couldn't load the leaderboard. ${error.message}</div>`;
+    return;
+  }
+  if (!profiles.length) {
+    content.innerHTML = `<div class="empty-state">No one on the board yet.</div>`;
+    return;
+  }
+
+  const rowsHtml = profiles.map((p, i) => {
+    const pos = i + 1;
+    const medalClass = pos === 1 ? 'gold' : pos === 2 ? 'silver' : pos === 3 ? 'bronze' : '';
+    const isMe = session && p.id === session.user.id;
+    return `
+      <div class="lb-row ${isMe ? 'me' : ''}">
+        <div class="lb-rank ${medalClass}">${pos}</div>
+        <div class="lb-avatar"></div>
+        <div class="lb-info">
+          <div class="lb-name">@${escapeHtml(p.username)}${isMe ? ' (you)' : ''}</div>
+          <div class="lb-tier">${p.rank}</div>
+        </div>
+        <div class="lb-score">
+          <div class="lb-score-num">${p.score}</div>
+          <div class="lb-score-label">${p.trophies} 🏆</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  content.innerHTML = `
+    <div class="section-header">
+      <div class="section-title">Leaderboard</div>
+      <div class="section-sub">Top ${profiles.length}</div>
+    </div>
+    ${rowsHtml}
+  `;
 }
 
 async function loadRecord() {
