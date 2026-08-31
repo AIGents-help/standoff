@@ -103,7 +103,7 @@
   <script>
     const SUPABASE_URL = 'https://cpjbnjcwpmcvasechmwx.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwamJuamN3cG1jdmFzZWNobXd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxNTM1NTQsImV4cCI6MjEwMzcyOTU1NH0.DnmZh785ix4CnlmIyPnB93YrYyfOUZCdweeZQkXY8k8';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const form = document.getElementById('waitlist-form');
     const emailInput = document.getElementById('waitlist-email');
     const btn = document.getElementById('waitlist-btn');
@@ -115,7 +115,7 @@
       btn.textContent = 'Joining...';
       msg.textContent = '';
       msg.className = 'waitlist-msg';
-      const { error } = await supabase.from('waitlist').insert({ email });
+      const { error } = await sb.from('waitlist').insert({ email });
       if (error) {
         if (error.code === '23505') {
           msg.textContent = "You're already on the list.";
@@ -133,6 +133,5 @@
       btn.textContent = 'Get notified at launch';
     });
   </script>
-
 </body>
 </html>
