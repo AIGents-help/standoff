@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StandOff — Prove It.</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #0E0E10;
+    --panel-a: #16161A;
+    --panel-b: #1C1C20;
+    --text: #F2F1ED;
+    --text-dim: #8A8A90;
+    --accent: #FF3D2E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ---------- HERO: split screen VS ---------- */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .split {
+    position: relative;
+    flex: 1;
+    display: flex;
+    min-height: 78vh;
+  }
+
+  .panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .panel-a { background: var(--panel-a); }
+  .panel-b { background: var(--panel-b); }
+
+  .panel-label {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    letter-spacing: -0.02em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    opacity: 0.35;
+    transition: opacity 0.4s ease, color 0.4s ease;
+  }
+
+  .panel:hover .panel-label {
+    opacity: 0.9;
+    color: var(--text);
+  }
+
+  .panel-a .panel-label { text-align: right; padding-right: 8vw; }
+  .panel-b .panel-label { text-align: left; padding-left: 8vw; }
+
+  .vs-divider {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100%;
+    width: 2px;
+    background: var(--accent);
+    z-index: 2;
+  }
+
+  .vs-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    width: clamp(64px, 8vw, 96px);
+    height: clamp(64px, 8vw, 96px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    color: var(--accent);
+    z-index: 3;
+    box-shadow: 0 0 40px rgba(255, 61, 46, 0.25);
+  }
+
+  .hero-content {
+    text-align: center;
+    padding: 4.5rem 1.5rem 3.5rem;
+  }
+
+  .wordmark {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+
+  .wordmark span { color: var(--accent); }
+
+  .tagline {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-bottom: 2rem;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.9rem 1.75rem;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+
+  .btn:hover { transform: translateY(-1px); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid #333338;
+  }
+
+  /* ---------- HOW IT WORKS ---------- */
+  .how {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem;
+    border-top: 1px solid #1E1E22;
+  }
+
+  .how-row {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid #1E1E22;
+    align-items: baseline;
+  }
+
+  .how-row:last-child { border-bottom: none; }
+
+  .how-verb {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1.1rem;
+    color: var(--accent);
+    min-width: 90px;
+  }
+
+  .how-desc {
+    color: var(--text-dim);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .how-desc strong { color: var(--text); font-weight: 600; }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    border-top: 1px solid #1E1E22;
+  }
+
+  footer a {
+    color: var(--text-dim);
+    text-decoration: none;
+    margin: 0 0.75rem;
+  }
+
+  footer a:hover { color: var(--text); }
+
+  @media (max-width: 640px) {
+    .split { flex-direction: column; min-height: auto; }
+    .panel { min-height: 22vh; }
+    .panel-a .panel-label, .panel-b .panel-label { text-align: center; padding: 0 1rem; }
+    .vs-divider { width: 100%; height: 2px; top: 50%; left: 0; transform: translateY(-50%); }
+    .vs-badge { top: 50%; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="split">
+      <div class="panel panel-a"><div class="panel-label">Your Build</div></div>
+      <div class="panel panel-b"><div class="panel-label">Their Build</div></div>
+      <div class="vs-divider"></div>
+      <div class="vs-badge">VS</div>
+    </div>
+
+    <div class="hero-content">
+      <div class="wordmark">Stand<span>Off</span></div>
+      <p class="tagline">Post what you own. Put it up against someone else's. Let the crowd decide who's actually got it.</p>
+      <div class="cta-row">
+        <a href="#" class="btn btn-primary">Get notified at launch</a>
+        <a href="#how" class="btn btn-secondary">How it works</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="how" id="how">
+    <div class="how-row">
+      <div class="how-verb">Post</div>
+      <div class="how-desc">Show what you've built, bought, or restored — <strong>cars, homes, watches, custom gear.</strong></div>
+    </div>
+    <div class="how-row">
+      <div class="how-verb">Call out</div>
+      <div class="how-desc">Challenge someone else's post on a specific element — <strong>top speed, sound, finish work, curb appeal.</strong></div>
+    </div>
+    <div class="how-row">
+      <div class="how-verb">Settle it</div>
+      <div class="how-desc">The crowd votes. Rank, trophies, and bragging rights go to the winner — <strong>no cash, no gimmicks, just proof.</strong></div>
+    </div>
+  </div>
+
+  <footer>
+    <div style="margin-bottom: 0.75rem;">&copy; 2026 StandOff</div>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+    <a href="/support">Support</a>
+  </footer>
+
+</body>
+</html>

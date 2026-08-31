@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You've been called out — StandOff</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0E0E10;
+    --panel: #16161A;
+    --panel-2: #1C1C20;
+    --text: #F2F1ED;
+    --text-dim: #8A8A90;
+    --accent: #FF3D2E;
+    --border: #26262B;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--accent); }
+
+  .clock {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+  .clock strong { color: var(--accent); }
+
+  /* ---------- CALLOUT BANNER ---------- */
+  .banner {
+    text-align: center;
+    padding: 2rem 1.5rem 1rem;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .banner-eyebrow {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .banner-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .banner-sub {
+    color: var(--text-dim);
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+
+  .banner-sub strong { color: var(--text); }
+
+  /* ---------- MATCHUP ---------- */
+  .matchup {
+    max-width: 780px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+    position: relative;
+  }
+
+  .matchup-grid {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .side {
+    flex: 1;
+    padding: 2.25rem 1.5rem;
+    text-align: center;
+  }
+
+  .side-a { background: var(--panel); }
+  .side-b {
+    background: var(--panel-2);
+    border-left: 1px solid var(--border);
+  }
+
+  .side-photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  .side-a .side-photo { background: linear-gradient(135deg, #24242a, #17171b); border: 1px solid var(--border); }
+  .side-b .side-photo {
+    background: repeating-linear-gradient(45deg, #1a1a1e, #1a1a1e 8px, #1e1e22 8px, #1e1e22 16px);
+    border: 1px dashed #3a3a40;
+  }
+
+  .side-name {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .side-tag {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  .vs-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.85rem;
+    color: var(--accent);
+    z-index: 2;
+  }
+
+  .source-tag {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+    color: var(--text-dim);
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.3rem 0.75rem;
+  }
+
+  /* ---------- ACTIONS ---------- */
+  .actions {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+    text-align: center;
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+    transition: transform 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+
+  .btn-accept {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  .fine-print {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 1rem;
+    line-height: 1.5;
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 560px) {
+    .matchup-grid { flex-direction: column; }
+    .side-b { border-left: none; border-top: 1px solid var(--border); }
+    .vs-center { top: auto; left: 50%; }
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Stand<span>Off</span></div>
+    <div class="clock">Expires in <strong>47:52:10</strong></div>
+  </nav>
+
+  <div class="banner">
+    <div class="banner-eyebrow">You've been called out</div>
+    <div class="banner-title">@[TikTokHandle] says theirs beats yours.</div>
+    <p class="banner-sub">A member of the StandOff community thinks their build takes yours — on <strong>Top Speed</strong>. The crowd decides who's right. You in?</p>
+  </div>
+
+  <div class="matchup">
+    <div class="matchup-grid">
+      <div class="side side-a">
+        <div class="side-photo">Their post</div>
+        <div class="side-name">@RidgeAndRedline</div>
+        <div class="side-tag">2019 Camaro SS · StandOff member</div>
+        <div class="source-tag">Posted on StandOff</div>
+      </div>
+      <div class="side side-b">
+        <div class="side-photo">Your build here</div>
+        <div class="side-name">@[TikTokHandle]</div>
+        <div class="side-tag">From your TikTok post</div>
+        <div class="source-tag">Not yet on StandOff</div>
+      </div>
+    </div>
+    <div class="vs-center">VS</div>
+  </div>
+
+  <div class="actions">
+    <a href="#" class="btn btn-accept">Accept — post it and settle this</a>
+    <a href="#" class="btn btn-ghost">See how StandOff works first</a>
+    <p class="fine-print">Free to post. No entry fee, no cash on the line — just rank, and the right to say you won.</p>
+  </div>
+
+  <footer>&copy; 2026 StandOff · <a href="/privacy" style="color:inherit">Privacy</a> · <a href="/terms" style="color:inherit">Terms</a></footer>
+
+</body>
+</html>

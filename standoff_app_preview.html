@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StandOff — App Preview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0E0E10;
+    --panel: #16161A;
+    --panel-2: #1C1C20;
+    --text: #F2F1ED;
+    --text-dim: #8A8A90;
+    --accent: #FF3D2E;
+    --border: #26262B;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    padding: 3rem 1.5rem;
+  }
+
+  .page-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  .page-title span { color: var(--accent); }
+
+  .page-sub {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 3rem;
+  }
+
+  .frames {
+    display: flex;
+    gap: 2.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .frame-wrap { text-align: center; }
+
+  .frame-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.01em;
+  }
+
+  .phone {
+    width: 300px;
+    height: 620px;
+    background: #000;
+    border-radius: 36px;
+    padding: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .screen {
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    border-radius: 28px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .status-bar {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+  }
+
+  .topbar {
+    padding: 0.5rem 1rem 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .topbar-logo {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1rem;
+  }
+  .topbar-logo span { color: var(--accent); }
+
+  .content { flex: 1; overflow: hidden; padding: 0 0.85rem; }
+
+  /* ---------- FEED CARD ---------- */
+  .post-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 0.85rem;
+  }
+
+  .post-media {
+    height: 130px;
+    background: linear-gradient(135deg, #24242a, #17171b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+  }
+
+  .post-body { padding: 0.7rem 0.85rem 0.85rem; }
+
+  .post-user {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 0.2rem;
+  }
+
+  .post-title {
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .chip {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.35rem 0.65rem;
+    border-radius: 20px;
+    background: var(--panel-2);
+    color: var(--text-dim);
+  }
+
+  .chip-callout {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ---------- ARENA ---------- */
+  .arena-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.85rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .arena-element {
+    font-size: 0.7rem;
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.5rem;
+  }
+
+  .arena-matchup {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .arena-thumb {
+    flex: 1;
+    height: 64px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #24242a, #17171b);
+  }
+
+  .arena-vs {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.7rem;
+    color: var(--accent);
+  }
+
+  .vote-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--panel-2);
+    overflow: hidden;
+    display: flex;
+    margin-bottom: 0.4rem;
+  }
+  .vote-fill-a { width: 63%; background: var(--accent); }
+  .vote-fill-b { width: 37%; background: #3a3a40; }
+
+  .vote-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+  }
+
+  .timer-tag {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-top: 0.5rem;
+  }
+
+  /* ---------- PROFILE ---------- */
+  .profile-head {
+    text-align: center;
+    padding: 0.5rem 0 1rem;
+  }
+
+  .avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF3D2E, #B8281C);
+    margin: 0 auto 0.6rem;
+  }
+
+  .profile-name { font-weight: 700; font-size: 1rem; }
+  .profile-rank {
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-top: 0.15rem;
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-around;
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.85rem;
+  }
+
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Archivo Black', sans-serif; font-size: 1.1rem; }
+  .stat-label { font-size: 0.65rem; color: var(--text-dim); margin-top: 0.1rem; }
+
+  .record-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0.2rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.78rem;
+  }
+
+  .record-result {
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.55rem;
+    border-radius: 6px;
+  }
+  .win { background: rgba(255,61,46,0.15); color: var(--accent); }
+  .loss { background: var(--panel-2); color: var(--text-dim); }
+
+  .tabbar {
+    height: 56px;
+    display: flex;
+    border-top: 1px solid var(--border);
+  }
+  .tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+  .tab.active { color: var(--accent); }
+</style>
+</head>
+<body>
+
+  <div class="page-title">Stand<span>Off</span> — Product Preview</div>
+  <div class="page-sub">Feed · Arena · Your Record</div>
+
+  <div class="frames">
+
+    <!-- FEED -->
+    <div class="frame-wrap">
+      <div class="frame-label">FEED</div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status-bar"><span>9:41</span><span>●●●</span></div>
+          <div class="topbar">
+            <div class="topbar-logo">Stand<span>Off</span></div>
+            <div class="chip">🔔</div>
+          </div>
+          <div class="content">
+            <div class="post-card">
+              <div class="post-media">Photo — '19 Camaro SS</div>
+              <div class="post-body">
+                <div class="post-user">@RidgeAndRedline</div>
+                <div class="post-title">Built for the strip, not the show</div>
+                <div class="post-actions">
+                  <div class="chip">👍 214</div>
+                  <div class="chip">💬 38</div>
+                  <div class="chip chip-callout">Call Out</div>
+                </div>
+              </div>
+            </div>
+            <div class="post-card">
+              <div class="post-media">Photo — Speedmaster Pro</div>
+              <div class="post-body">
+                <div class="post-user">@WristGameStrong</div>
+                <div class="post-title">1969 Moonwatch, all original</div>
+                <div class="post-actions">
+                  <div class="chip">👍 156</div>
+                  <div class="chip">💬 22</div>
+                  <div class="chip chip-callout">Call Out</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab active">Feed</div>
+            <div class="tab">Arena</div>
+            <div class="tab">Record</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARENA -->
+    <div class="frame-wrap">
+      <div class="frame-label">ARENA</div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status-bar"><span>9:41</span><span>●●●</span></div>
+          <div class="topbar">
+            <div class="topbar-logo">The <span>Arena</span></div>
+            <div class="chip">🔴 Live</div>
+          </div>
+          <div class="content">
+            <div class="arena-card">
+              <div class="arena-element">Top Speed</div>
+              <div class="arena-matchup">
+                <div class="arena-thumb"></div>
+                <div class="arena-vs">VS</div>
+                <div class="arena-thumb"></div>
+              </div>
+              <div class="vote-bar"><div class="vote-fill-a"></div><div class="vote-fill-b"></div></div>
+              <div class="vote-meta"><span>63% Camaro SS</span><span>37% GT500</span></div>
+              <div class="timer-tag">⏱ Settles in 14h 22m</div>
+            </div>
+            <div class="arena-card">
+              <div class="arena-element">Overall Finish</div>
+              <div class="arena-matchup">
+                <div class="arena-thumb"></div>
+                <div class="arena-vs">VS</div>
+                <div class="arena-thumb"></div>
+              </div>
+              <div class="vote-bar"><div class="vote-fill-a" style="width:48%"></div><div class="vote-fill-b" style="width:52%;background:#3a3a40"></div></div>
+              <div class="vote-meta"><span>48% Kitchen Remodel</span><span>52% Kitchen Remodel</span></div>
+              <div class="timer-tag">⏱ Settles in 31h 05m</div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab">Feed</div>
+            <div class="tab active">Arena</div>
+            <div class="tab">Record</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="frame-wrap">
+      <div class="frame-label">YOUR RECORD</div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status-bar"><span>9:41</span><span>●●●</span></div>
+          <div class="topbar">
+            <div class="topbar-logo">Your <span>Record</span></div>
+            <div class="chip">⚙️</div>
+          </div>
+          <div class="content">
+            <div class="profile-head">
+              <div class="avatar"></div>
+              <div class="profile-name">@RidgeAndRedline</div>
+              <div class="profile-rank">ELITE</div>
+            </div>
+            <div class="stat-row">
+              <div class="stat"><div class="stat-num">1,842</div><div class="stat-label">SCORE</div></div>
+              <div class="stat"><div class="stat-num">27</div><div class="stat-label">TROPHIES</div></div>
+              <div class="stat"><div class="stat-num">19–8</div><div class="stat-label">RECORD</div></div>
+            </div>
+            <div class="record-row"><span>vs. GT500 — Top Speed</span><span class="record-result win">WON</span></div>
+            <div class="record-row"><span>vs. Trans Am — Sound</span><span class="record-result win">WON</span></div>
+            <div class="record-row"><span>vs. Hellcat — 0–60</span><span class="record-result loss">LOST</span></div>
+            <div class="record-row"><span>vs. RS6 — Aesthetics</span><span class="record-result win">WON</span></div>
+          </div>
+          <div class="tabbar">
+            <div class="tab">Feed</div>
+            <div class="tab">Arena</div>
+            <div class="tab active">Record</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
