@@ -450,7 +450,8 @@
   .record-result { font-weight: 700; font-size: 0.7rem; padding: 0.25rem 0.55rem; border-radius: 6px; }
   .win-tag { background: rgba(255,61,46,0.15); color: var(--accent); }
   .loss-tag { background: var(--panel-2); color: var(--text-dim); }
-  .logout-btn { margin-top: 1.5rem; }
+  .share-btn { margin-top: 1.5rem; }
+  .logout-btn { margin-top: 0.75rem; }
 
   .tabbar {
     position: fixed;
@@ -556,6 +557,8 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let session = null;
 let activeTab = 'feed';
 let myVotedChallengeIds = new Set();
+let currentProfile = null;
+let currentFinished = [];
 
 const app = document.getElementById('app');
 const modalOverlay = document.getElementById('modal-overlay');
@@ -978,7 +981,10 @@ async function loadRecord() {
     .order('created_at', { ascending: false })
     .limit(10);
 
-  const rows = (finished || []).map(c => {
+  currentProfile = profile;
+  currentFinished = finished || [];
+
+  const rows = currentFinished.map(c => {
     const won = c.winner_id === session.user.id;
     const opponentTitle = c.challenger_id === session.user.id ? c.postB?.title : c.postA?.title;
     return `
@@ -998,12 +1004,156 @@ async function loadRecord() {
     <div class="stat-row">
       <div class="stat"><div class="stat-num">${profile.score}</div><div class="stat-label">SCORE</div></div>
       <div class="stat"><div class="stat-num">${profile.trophies}</div><div class="stat-label">TROPHIES</div></div>
-      <div class="stat"><div class="stat-num">${finished?.length || 0}</div><div class="stat-label">SETTLED</div></div>
+      <div class="stat"><div class="stat-num">${currentFinished.length}</div><div class="stat-label">SETTLED</div></div>
     </div>
     ${rows || `<div class="empty-state">No settled challenges yet.</div>`}
+    <button class="btn btn-primary share-btn" id="share-record-btn">📲 Share My Record</button>
     <button class="btn btn-ghost logout-btn" id="record-logout">Log out</button>
   `;
   document.getElementById('record-logout').addEventListener('click', logout);
+  document.getElementById('share-record-btn').addEventListener('click', shareRecordCard);
+}
+
+async function shareRecordCard() {
+  const btn = document.getElementById('share-record-btn');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Building your card...';
+
+  try {
+    await document.fonts.load('900 90px "Archivo Black"');
+    await document.fonts.load('700 40px "Inter"');
+
+    const wins = currentFinished.filter(c => c.winner_id === session.user.id).length;
+    const losses = currentFinished.length - wins;
+    const profile = currentProfile;
+
+    const W = 1080, H = 1350;
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#0E0E10';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#FF3D2E';
+    ctx.fillRect(0, 0, W, 14);
+
+    ctx.textAlign = 'center';
+    ctx.font = '900 64px "Archivo Black", sans-serif';
+    const standW = ctx.measureText('Stand').width;
+    const offW = ctx.measureText('Off').width;
+    const totalW = standW + offW;
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#F2F1ED';
+    ctx.fillText('Stand', W / 2 - totalW / 2, 130);
+    ctx.fillStyle = '#FF3D2E';
+    ctx.fillText('Off', W / 2 - totalW / 2 + standW, 130);
+
+    ctx.textAlign = 'center';
+    ctx.font = '600 26px Inter, sans-serif';
+    ctx.fillStyle = '#8A8A90';
+    ctx.fillText('PROVE IT', W / 2, 175);
+
+    ctx.beginPath();
+    ctx.arc(W / 2, 340, 90, 0, Math.PI * 2);
+    const grad = ctx.createLinearGradient(W/2 - 90, 250, W/2 + 90, 430);
+    grad.addColorStop(0, '#FF3D2E');
+    grad.addColorStop(1, '#B8281C');
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    ctx.font = '900 44px "Archivo Black", sans-serif';
+    ctx.fillStyle = '#F2F1ED';
+    ctx.fillText('@' + profile.username, W / 2, 500);
+
+    ctx.font = '700 30px Inter, sans-serif';
+    ctx.fillStyle = '#FF3D2E';
+    ctx.fillText(profile.rank.toUpperCase(), W / 2, 545);
+
+    const statY = 700;
+    const stats = [
+      { num: String(profile.score), label: 'SCORE' },
+      { num: String(profile.trophies), label: 'TROPHIES' },
+      { num: `${wins}-${losses}`, label: 'RECORD' }
+    ];
+    const colW = W / 3;
+    stats.forEach((s, i) => {
+      const cx = colW * i + colW / 2;
+      ctx.font = '900 68px "Archivo Black", sans-serif';
+      ctx.fillStyle = '#F2F1ED';
+      ctx.fillText(s.num, cx, statY);
+      ctx.font = '700 24px Inter, sans-serif';
+      ctx.fillStyle = '#8A8A90';
+      ctx.fillText(s.label, cx, statY + 40);
+    });
+
+    ctx.strokeStyle = '#26262B';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(80, 780);
+    ctx.lineTo(W - 80, 780);
+    ctx.stroke();
+
+    ctx.font = '700 30px Inter, sans-serif';
+    ctx.fillStyle = '#F2F1ED';
+    ctx.textAlign = 'left';
+    ctx.fillText('Recent Standoffs', 80, 850);
+
+    let ry = 910;
+    currentFinished.slice(0, 4).forEach(c => {
+      const won = c.winner_id === session.user.id;
+      const opponentTitle = c.challenger_id === session.user.id ? c.postB?.title : c.postA?.title;
+      ctx.font = '600 26px Inter, sans-serif';
+      ctx.fillStyle = '#8A8A90';
+      const label = 'vs. ' + (opponentTitle || 'Opponent');
+      ctx.fillText(label.length > 34 ? label.slice(0, 34) + '…' : label, 80, ry);
+      ctx.textAlign = 'right';
+      ctx.fillStyle = won ? '#FF3D2E' : '#8A8A90';
+      ctx.font = '900 26px "Archivo Black", sans-serif';
+      ctx.fillText(won ? 'WON' : 'LOST', W - 80, ry);
+      ctx.textAlign = 'left';
+      ry += 60;
+    });
+
+    ctx.textAlign = 'center';
+    ctx.font = '700 28px Inter, sans-serif';
+    ctx.fillStyle = '#8A8A90';
+    ctx.fillText('standoffapp.com', W / 2, H - 60);
+    ctx.font = '600 22px Inter, sans-serif';
+    ctx.fillText('Think you can stand up to this?', W / 2, H - 30);
+
+    canvas.toBlob(async (blob) => {
+      btn.disabled = false;
+      btn.textContent = originalText;
+      const file = new File([blob], 'standoff-record.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: 'My StandOff Record',
+            text: `${profile.rank} — ${profile.score} pts — standoffapp.com`
+          });
+          showToast('Shared!');
+        } catch (e) {
+          if (e.name !== 'AbortError') showToast('Could not share.', true);
+        }
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'standoff-record.png';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+        showToast('Saved! Post it to your story.');
+      }
+    }, 'image/png');
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = originalText;
+    showToast('Could not build the share card.', true);
+  }
 }
 
 function openChallengeModal(opponentPostId, opponentId) {
