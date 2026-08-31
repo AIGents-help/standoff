@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StandOff</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0E0E10;
+    --panel: #16161A;
+    --panel-2: #1C1C20;
+    --text: #F2F1ED;
+    --text-dim: #8A8A90;
+    --accent: #FF3D2E;
+    --border: #26262B;
+    --win: #4ADE80;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+  }
+
+  #app {
+    max-width: 480px;
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+
+  /* ---------- AUTH SCREEN ---------- */
+  .auth-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .auth-logo {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .auth-logo span { color: var(--accent); }
+
+  .auth-sub {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    max-width: 300px;
+  }
+
+  .auth-form { width: 100%; max-width: 320px; }
+
+  input[type="email"], input[type="text"], input[type="number"], textarea, select {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    outline: none;
+    margin-bottom: 0.75rem;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.85rem 1.25rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.5; cursor: default; }
+
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
+
+  .status-msg { font-size: 0.85rem; margin-top: 0.75rem; min-height: 1.2rem; }
+  .status-msg.success { color: var(--win); }
+  .status-msg.error { color: var(--accent); }
+
+  /* ---------- TOPBAR ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar-logo { font-family: 'Archivo Black', sans-serif; font-size: 1.1rem; }
+  .topbar-logo span { color: var(--accent); }
+  .icon-btn {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 8px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  /* ---------- CONTENT ---------- */
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.1rem 5rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    color: var(--text-dim);
+    padding: 3rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Feed */
+  .post-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 0.9rem;
+  }
+  .post-media {
+    height: 140px;
+    background: linear-gradient(135deg, #24242a, #17171b);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; color: var(--text-dim);
+  }
+  .post-body { padding: 0.8rem 0.95rem 0.95rem; }
+  .post-user { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.2rem; }
+  .post-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.3rem; }
+  .post-desc { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.7rem; line-height: 1.4; }
+  .post-actions { display: flex; gap: 0.5rem; }
+  .chip {
+    font-size: 0.72rem; font-weight: 600; padding: 0.35rem 0.65rem;
+    border-radius: 20px; background: var(--panel-2); color: var(--text-dim);
+    border: none; cursor: pointer;
+  }
+  .chip-callout { background: var(--accent); color: #fff; }
+
+  /* Arena */
+  .arena-card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 0.9rem; margin-bottom: 0.9rem;
+  }
+  .arena-element {
+    font-size: 0.7rem; color: var(--accent); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.6rem;
+  }
+  .arena-matchup { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.7rem; }
+  .arena-side { flex: 1; text-align: center; }
+  .arena-thumb {
+    width: 100%; height: 70px; border-radius: 8px;
+    background: linear-gradient(135deg, #24242a, #17171b); margin-bottom: 0.4rem;
+  }
+  .arena-side-name { font-size: 0.72rem; color: var(--text-dim); }
+  .arena-vs { font-family: 'Archivo Black', sans-serif; font-size: 0.72rem; color: var(--accent); }
+  .vote-bar { height: 8px; border-radius: 4px; background: var(--panel-2); overflow: hidden; display: flex; margin-bottom: 0.4rem; }
+  .vote-fill-a { background: var(--accent); }
+  .vote-fill-b { background: #3a3a40; }
+  .vote-meta { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.6rem; }
+  .vote-actions { display: flex; gap: 0.5rem; }
+  .vote-btn {
+    flex: 1; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--panel-2); color: var(--text); font-weight: 600; font-size: 0.8rem;
+    cursor: pointer;
+  }
+  .vote-btn:hover { border-color: var(--accent); }
+  .vote-btn:disabled { opacity: 0.4; cursor: default; }
+  .voted-tag { font-size: 0.72rem; color: var(--win); text-align: center; }
+
+  /* Profile */
+  .profile-head { text-align: center; padding: 1rem 0 1.2rem; }
+  .avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF3D2E, #B8281C); margin: 0 auto 0.6rem;
+  }
+  .profile-name { font-weight: 700; font-size: 1.05rem; }
+  .profile-rank { font-size: 0.78rem; color: var(--accent); font-weight: 700; margin-top: 0.15rem; letter-spacing: 0.02em; }
+  .stat-row {
+    display: flex; justify-content: space-around; padding: 1rem 0;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 1rem;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Archivo Black', sans-serif; font-size: 1.15rem; }
+  .stat-label { font-size: 0.65rem; color: var(--text-dim); margin-top: 0.1rem; }
+  .record-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.7rem 0.1rem; border-bottom: 1px solid var(--border); font-size: 0.8rem;
+  }
+  .record-result { font-weight: 700; font-size: 0.7rem; padding: 0.25rem 0.55rem; border-radius: 6px; }
+  .win-tag { background: rgba(255,61,46,0.15); color: var(--accent); }
+  .loss-tag { background: var(--panel-2); color: var(--text-dim); }
+  .logout-btn { margin-top: 1.5rem; }
+
+  /* ---------- TABBAR ---------- */
+  .tabbar {
+    display: flex;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .tab {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+    padding: 0.7rem 0; font-size: 0.7rem; color: var(--text-dim); font-weight: 600;
+    background: none; border: none; cursor: pointer;
+  }
+  .tab.active { color: var(--accent); }
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    display: none; align-items: flex-end; justify-content: center; z-index: 50;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--panel); border-top: 1px solid var(--border);
+    border-radius: 16px 16px 0 0; padding: 1.5rem 1.25rem 2rem;
+    width: 100%; max-width: 480px; max-height: 85vh; overflow-y: auto;
+  }
+  .modal-title { font-family: 'Archivo Black', sans-serif; font-size: 1.1rem; margin-bottom: 1rem; }
+  .modal-close { float: right; background: none; border: none; color: var(--text-dim); font-size: 1.2rem; cursor: pointer; }
+
+  .fab {
+    position: fixed; bottom: 5rem; right: calc(50% - 240px + 1.1rem);
+    width: 52px; height: 52px; border-radius: 50%; background: var(--accent);
+    color: #fff; font-size: 1.5rem; border: none; cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255,61,46,0.4); z-index: 10;
+  }
+  @media (max-width: 540px) { .fab { right: 1.1rem; } }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ============================================================
+   CONFIG — drop in your real Supabase project values
+   ============================================================ */
+const SUPABASE_URL = 'https://YOUR_PROJECT_REF.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR_ANON_PUBLIC_KEY';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let session = null;
+let activeTab = 'feed';
+let myVotedChallengeIds = new Set();
+
+const app = document.getElementById('app');
+const modalOverlay = document.getElementById('modal-overlay');
+const modalContent = document.getElementById('modal-content');
+
+/* ============================================================
+   AUTH
+   ============================================================ */
+async function initAuth() {
+  const { data } = await supabase.auth.getSession();
+  session = data.session;
+  supabase.auth.onAuthStateChange((_event, newSession) => {
+    session = newSession;
+    render();
+  });
+  render();
+}
+
+async function sendMagicLink(email) {
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo: window.location.href }
+  });
+  return error;
+}
+
+async function logout() {
+  await supabase.auth.signOut();
+  session = null;
+  render();
+}
+
+/* ============================================================
+   RENDER — ROOT
+   ============================================================ */
+function render() {
+  if (!session) {
+    renderAuthScreen();
+  } else {
+    renderApp();
+  }
+}
+
+function renderAuthScreen() {
+  app.innerHTML = `
+    <div class="auth-screen">
+      <div class="auth-logo">Stand<span>Off</span></div>
+      <div class="auth-sub">Post what you own. Put it up against someone else's. Let the crowd decide.</div>
+      <div class="auth-form">
+        <input type="email" id="auth-email" placeholder="your@email.com" />
+        <button class="btn btn-primary" id="auth-submit">Send magic link</button>
+        <div class="status-msg" id="auth-msg"></div>
+      </div>
+    </div>
+  `;
+  document.getElementById('auth-submit').addEventListener('click', async () => {
+    const email = document.getElementById('auth-email').value.trim();
+    const msg = document.getElementById('auth-msg');
+    const btn = document.getElementById('auth-submit');
+    if (!email) return;
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    const error = await sendMagicLink(email);
+    btn.disabled = false;
+    btn.textContent = 'Send magic link';
+    if (error) {
+      msg.textContent = error.message;
+      msg.className = 'status-msg error';
+    } else {
+      msg.textContent = 'Check your email for the sign-in link.';
+      msg.className = 'status-msg success';
+    }
+  });
+}
+
+/* ============================================================
+   RENDER — MAIN APP SHELL
+   ============================================================ */
+function renderApp() {
+  app.innerHTML = `
+    <div class="topbar">
+      <div class="topbar-logo">Stand<span>Off</span></div>
+      <button class="icon-btn" id="logout-btn">⎋</button>
+    </div>
+    <div class="content" id="content"></div>
+    ${activeTab === 'feed' ? '<button class="fab" id="fab-post">+</button>' : ''}
+    <div class="tabbar">
+      <button class="tab ${activeTab === 'feed' ? 'active' : ''}" data-tab="feed">Feed</button>
+      <button class="tab ${activeTab === 'arena' ? 'active' : ''}" data-tab="arena">Arena</button>
+      <button class="tab ${activeTab === 'record' ? 'active' : ''}" data-tab="record">Record</button>
+    </div>
+  `;
+  document.getElementById('logout-btn').addEventListener('click', logout);
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => { activeTab = btn.dataset.tab; renderApp(); });
+  });
+  const fab = document.getElementById('fab-post');
+  if (fab) fab.addEventListener('click', openNewPostModal);
+
+  if (activeTab === 'feed') loadFeed();
+  if (activeTab === 'arena') loadArena();
+  if (activeTab === 'record') loadRecord();
+}
+
+/* ============================================================
+   FEED
+   ============================================================ */
+async function loadFeed() {
+  const content = document.getElementById('content');
+  content.innerHTML = `<div class="empty-state">Loading...</div>`;
+
+  const { data: posts, error } = await supabase
+    .from('posts')
+    .select('id, title, description, user_id, category, profiles(username)')
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  if (error) {
+    content.innerHTML = `<div class="empty-state">Couldn't load the feed. ${error.message}</div>`;
+    return;
+  }
+  if (!posts.length) {
+    content.innerHTML = `<div class="empty-state">No posts yet. Be the first to put something up.</div>`;
+    return;
+  }
+
+  content.innerHTML = posts.map(p => `
+    <div class="post-card">
+      <div class="post-media">${p.category || 'Photo'}</div>
+      <div class="post-body">
+        <div class="post-user">@${p.profiles?.username || 'unknown'}</div>
+        <div class="post-title">${escapeHtml(p.title)}</div>
+        ${p.description ? `<div class="post-desc">${escapeHtml(p.description)}</div>` : ''}
+        <div class="post-actions">
+          <button class="chip chip-callout" data-post-id="${p.id}" data-owner-id="${p.user_id}">Challenge</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  content.querySelectorAll('.chip-callout').forEach(btn => {
+    btn.addEventListener('click', () => openChallengeModal(btn.dataset.postId, btn.dataset.ownerId));
+  });
+}
+
+function openNewPostModal() {
+  modalContent.innerHTML = `
+    <button class="modal-close" id="modal-close">✕</button>
+    <div class="modal-title">Post something</div>
+    <select id="new-category">
+      <option value="Cars">Cars</option>
+      <option value="Homes">Homes</option>
+      <option value="Motorcycles">Motorcycles</option>
+      <option value="Timepieces">Timepieces</option>
+      <option value="Custom Gear">Custom Gear</option>
+    </select>
+    <input type="text" id="new-title" placeholder="Title (e.g. '69 Camaro SS)" />
+    <textarea id="new-desc" rows="3" placeholder="Description"></textarea>
+    <button class="btn btn-primary" id="new-submit">Post it</button>
+    <div class="status-msg" id="new-msg"></div>
+  `;
+  modalOverlay.classList.add('open');
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('new-submit').addEventListener('click', async () => {
+    const title = document.getElementById('new-title').value.trim();
+    const description = document.getElementById('new-desc').value.trim();
+    const category = document.getElementById('new-category').value;
+    const msg = document.getElementById('new-msg');
+    if (!title) { msg.textContent = 'Title is required.'; msg.className = 'status-msg error'; return; }
+
+    const { error } = await supabase.from('posts').insert({
+      user_id: session.user.id, title, description, category
+    });
+
+    if (error) {
+      msg.textContent = error.message;
+      msg.className = 'status-msg error';
+    } else {
+      closeModal();
+      loadFeed();
+    }
+  });
+}
+
+/* ============================================================
+   ARENA
+   ============================================================ */
+async function loadArena() {
+  const content = document.getElementById('content');
+  content.innerHTML = `<div class="empty-state">Loading...</div>`;
+
+  const { data: challenges, error } = await supabase
+    .from('challenges')
+    .select(`
+      id, element, votes_a, votes_b, status,
+      postA:post_a_id ( title ),
+      postB:post_b_id ( title )
+    `)
+    .eq('status', 'Active')
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  if (error) {
+    content.innerHTML = `<div class="empty-state">Couldn't load the arena. ${error.message}</div>`;
+    return;
+  }
+  if (!challenges.length) {
+    content.innerHTML = `<div class="empty-state">No live challenges right now. Start one from the Feed.</div>`;
+    return;
+  }
+
+  const { data: myVotes } = await supabase
+    .from('votes')
+    .select('challenge_id')
+    .eq('voter_id', session.user.id);
+  myVotedChallengeIds = new Set((myVotes || []).map(v => v.challenge_id));
+
+  content.innerHTML = challenges.map(c => {
+    const total = (c.votes_a || 0) + (c.votes_b || 0);
+    const pctA = total ? Math.round((c.votes_a / total) * 100) : 50;
+    const pctB = 100 - pctA;
+    const voted = myVotedChallengeIds.has(c.id);
+    return `
+      <div class="arena-card">
+        <div class="arena-element">${escapeHtml(c.element)}</div>
+        <div class="arena-matchup">
+          <div class="arena-side"><div class="arena-thumb"></div><div class="arena-side-name">${escapeHtml(c.postA?.title || 'Post A')}</div></div>
+          <div class="arena-vs">VS</div>
+          <div class="arena-side"><div class="arena-thumb"></div><div class="arena-side-name">${escapeHtml(c.postB?.title || 'Post B')}</div></div>
+        </div>
+        <div class="vote-bar">
+          <div class="vote-fill-a" style="width:${pctA}%"></div>
+          <div class="vote-fill-b" style="width:${pctB}%"></div>
+        </div>
+        <div class="vote-meta"><span>${pctA}%</span><span>${pctB}%</span></div>
+        ${voted
+          ? `<div class="voted-tag">✓ You voted</div>`
+          : `<div class="vote-actions">
+               <button class="vote-btn" data-id="${c.id}" data-opt="A">Vote A</button>
+               <button class="vote-btn" data-id="${c.id}" data-opt="B">Vote B</button>
+             </div>`
+        }
+      </div>
+    `;
+  }).join('');
+
+  content.querySelectorAll('.vote-btn').forEach(btn => {
+    btn.addEventListener('click', () => castVote(btn.dataset.id, btn.dataset.opt));
+  });
+}
+
+async function castVote(challengeId, option) {
+  const { error } = await supabase.from('votes').insert({
+    challenge_id: challengeId, voter_id: session.user.id, option
+  });
+  if (error && error.code !== '23505') {
+    alert(error.message);
+    return;
+  }
+  loadArena();
+}
+
+/* ============================================================
+   RECORD (PROFILE)
+   ============================================================ */
+async function loadRecord() {
+  const content = document.getElementById('content');
+  content.innerHTML = `<div class="empty-state">Loading...</div>`;
+
+  const { data: profile, error: profileErr } = await supabase
+    .from('profiles')
+    .select('username, score, trophies, rank')
+    .eq('id', session.user.id)
+    .single();
+
+  if (profileErr) {
+    content.innerHTML = `<div class="empty-state">Couldn't load your profile. ${profileErr.message}</div>`;
+    return;
+  }
+
+  const { data: finished } = await supabase
+    .from('challenges')
+    .select('id, element, status, winner_id, challenger_id, opponent_id, postA:post_a_id(title), postB:post_b_id(title)')
+    .or(`challenger_id.eq.${session.user.id},opponent_id.eq.${session.user.id}`)
+    .eq('status', 'Finished')
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  const rows = (finished || []).map(c => {
+    const won = c.winner_id === session.user.id;
+    const opponentTitle = c.challenger_id === session.user.id ? c.postB?.title : c.postA?.title;
+    return `
+      <div class="record-row">
+        <span>vs. ${escapeHtml(opponentTitle || 'Opponent')} — ${escapeHtml(c.element)}</span>
+        <span class="record-result ${won ? 'win-tag' : 'loss-tag'}">${won ? 'WON' : 'LOST'}</span>
+      </div>
+    `;
+  }).join('');
+
+  content.innerHTML = `
+    <div class="profile-head">
+      <div class="avatar"></div>
+      <div class="profile-name">@${escapeHtml(profile.username)}</div>
+      <div class="profile-rank">${profile.rank.toUpperCase()}</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">${profile.score}</div><div class="stat-label">SCORE</div></div>
+      <div class="stat"><div class="stat-num">${profile.trophies}</div><div class="stat-label">TROPHIES</div></div>
+      <div class="stat"><div class="stat-num">${finished?.length || 0}</div><div class="stat-label">SETTLED</div></div>
+    </div>
+    ${rows || `<div class="empty-state">No settled challenges yet.</div>`}
+    <button class="btn btn-ghost logout-btn" id="record-logout">Log out</button>
+  `;
+  document.getElementById('record-logout').addEventListener('click', logout);
+}
+
+/* ============================================================
+   CHALLENGE MODAL (from Feed → creates a Challenge against a post)
+   ============================================================ */
+function openChallengeModal(opponentPostId, opponentId) {
+  modalContent.innerHTML = `
+    <button class="modal-close" id="modal-close">✕</button>
+    <div class="modal-title">Call them out</div>
+    <input type="text" id="challenge-element" placeholder="What are you settling? (e.g. Top Speed)" />
+    <button class="btn btn-primary" id="challenge-submit">Send the challenge</button>
+    <div class="status-msg" id="challenge-msg"></div>
+  `;
+  modalOverlay.classList.add('open');
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('challenge-submit').addEventListener('click', async () => {
+    const element = document.getElementById('challenge-element').value.trim();
+    const msg = document.getElementById('challenge-msg');
+    if (!element) { msg.textContent = 'Say what you\'re settling.'; msg.className = 'status-msg error'; return; }
+
+    // Fetch one of my own posts to use as postB — in a full build this
+    // would be a picker; kept simple here since the schema/flow is what matters.
+    const { data: myPosts } = await supabase
+      .from('posts')
+      .select('id')
+      .eq('user_id', session.user.id)
+      .limit(1);
+
+    if (!myPosts || !myPosts.length) {
+      msg.textContent = 'Post something of yours first.';
+      msg.className = 'status-msg error';
+      return;
+    }
+
+    const { error } = await supabase.from('challenges').insert({
+      challenger_id: session.user.id,
+      opponent_id: opponentId,
+      post_a_id: opponentPostId,
+      post_b_id: myPosts[0].id,
+      bet_type: 'Gentleman',
+      element
+    });
+
+    if (error) {
+      msg.textContent = error.message;
+      msg.className = 'status-msg error';
+    } else {
+      closeModal();
+      activeTab = 'arena';
+      renderApp();
+    }
+  });
+}
+
+function closeModal() {
+  modalOverlay.classList.remove('open');
+  modalContent.innerHTML = '';
+}
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+initAuth();
+</script>
+</body>
+</html>
