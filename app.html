@@ -19,7 +19,7 @@
     --gold: #FFC94A;
     --silver: #C7CDD6;
     --bronze: #D98A5B;
-    --tabbar-h: 60px;
+    --tabbar-h: 64px;
     --topbar-h: 58px;
   }
 
@@ -31,8 +31,37 @@
     font-family: 'Inter', sans-serif;
   }
 
-  body {
-    min-height: 100vh;
+  body { min-height: 100vh; }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.9); opacity: 0; }
+    60% { transform: scale(1.03); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 6px 20px rgba(255,61,46,0.4); }
+    50% { box-shadow: 0 6px 28px rgba(255,61,46,0.75); }
+  }
+  @keyframes beltShine {
+    0% { background-position: -150% 0; }
+    100% { background-position: 250% 0; }
+  }
+  @keyframes dotBounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes toastIn {
+    from { transform: translate(-50%, -20px); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+  }
+  @keyframes tabPop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.25); }
+    100% { transform: scale(1); }
   }
 
   #app {
@@ -58,6 +87,7 @@
     font-family: 'Archivo Black', sans-serif;
     font-size: 2rem;
     margin-bottom: 0.5rem;
+    animation: popIn 0.5s ease;
   }
   .auth-logo span { color: var(--accent); }
 
@@ -81,8 +111,9 @@
     color: var(--text);
     outline: none;
     margin-bottom: 0.75rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
-  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,61,46,0.15); }
 
   .btn {
     font-family: 'Inter', sans-serif;
@@ -93,18 +124,19 @@
     border: none;
     cursor: pointer;
     width: 100%;
-    transition: opacity 0.15s ease, transform 0.15s ease;
+    transition: opacity 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
   }
-  .btn:active { transform: scale(0.98); }
+  .btn:active { transform: scale(0.96); }
   .btn:disabled { opacity: 0.5; cursor: default; }
 
   .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { box-shadow: 0 4px 16px rgba(255,61,46,0.4); }
   .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
   .btn-sm { padding: 0.55rem 0.9rem; font-size: 0.78rem; width: auto; }
 
   .status-msg { font-size: 0.85rem; margin-top: 0.75rem; min-height: 1.2rem; }
   .status-msg.success { color: var(--win); }
-  .status-msg.error { color: var(--accent); }
+  .status-msg.error { color: var(--accent); animation: popIn 0.25s ease; }
 
   .auth-divider {
     display: flex;
@@ -132,7 +164,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 1.1rem;
-    background: var(--bg);
+    background: rgba(14,14,16,0.92);
+    backdrop-filter: blur(6px);
     border-bottom: 1px solid var(--border);
   }
   .topbar-logo { font-family: 'Archivo Black', sans-serif; font-size: 1.1rem; }
@@ -149,7 +182,9 @@
     justify-content: center;
     cursor: pointer;
     font-size: 0.9rem;
+    transition: transform 0.12s ease, border-color 0.15s ease;
   }
+  .icon-btn:active { transform: scale(0.9); }
 
   .content {
     padding: 1rem 1.1rem;
@@ -179,6 +214,19 @@
     font-size: 0.9rem;
   }
 
+  .loading-dots { display: inline-flex; gap: 0.3rem; }
+  .loading-dots span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent);
+    animation: dotBounce 1.2s infinite ease-in-out;
+  }
+  .loading-dots span:nth-child(2) { animation-delay: 0.15s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+  .fade-item {
+    animation: fadeInUp 0.35s ease both;
+  }
+
   .belt-card {
     background: linear-gradient(135deg, #1c1710, #16161A);
     border: 1px solid #3a2e12;
@@ -189,6 +237,18 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    overflow: hidden;
+    transition: transform 0.15s ease;
+  }
+  .belt-card:active { transform: scale(0.98); }
+  .belt-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(100deg, transparent 40%, rgba(255,201,74,0.18) 50%, transparent 60%);
+    background-size: 200% 100%;
+    animation: beltShine 3.5s ease-in-out infinite;
+    pointer-events: none;
   }
   .belt-icon {
     font-size: 1.6rem;
@@ -201,8 +261,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    z-index: 1;
   }
-  .belt-info { flex: 1; min-width: 0; }
+  .belt-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
   .belt-category {
     font-size: 0.65rem; font-weight: 700; color: var(--gold);
     text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.15rem;
@@ -227,7 +289,11 @@
     font-size: 0.72rem;
     font-weight: 700;
     cursor: pointer;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.12s ease;
   }
+  .belt-challenge-btn:active { transform: scale(0.92); }
 
   .post-card {
     background: var(--panel);
@@ -236,7 +302,9 @@
     overflow: hidden;
     margin-bottom: 0.9rem;
     position: relative;
+    transition: transform 0.15s ease, border-color 0.15s ease;
   }
+  .post-card:hover { border-color: #3a3a40; transform: translateY(-1px); }
   .post-media {
     height: 140px;
     background: linear-gradient(135deg, #24242a, #17171b);
@@ -252,7 +320,9 @@
     font-size: 0.72rem; font-weight: 600; padding: 0.35rem 0.65rem;
     border-radius: 20px; background: var(--panel-2); color: var(--text-dim);
     border: none; cursor: pointer;
+    transition: transform 0.12s ease;
   }
+  .chip:active { transform: scale(0.92); }
   .chip-callout { background: var(--accent); color: #fff; }
 
   .sample-badge {
@@ -275,7 +345,9 @@
     background: var(--panel); border: 1px solid var(--border);
     border-radius: 12px; padding: 0.9rem; margin-bottom: 0.9rem;
     position: relative;
+    transition: transform 0.15s ease;
   }
+  .arena-card:hover { transform: translateY(-1px); }
   .arena-element {
     font-size: 0.7rem; color: var(--accent); font-weight: 700;
     text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.6rem;
@@ -286,7 +358,7 @@
     color: var(--text-dim);
     margin-bottom: 0.6rem;
   }
-  .arena-timer.urgent { color: var(--accent); font-weight: 600; }
+  .arena-timer.urgent { color: var(--accent); font-weight: 700; animation: dotBounce 1.4s infinite; }
   .arena-matchup { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.7rem; }
   .arena-side { flex: 1; text-align: center; }
   .arena-thumb {
@@ -294,20 +366,26 @@
     background: linear-gradient(135deg, #24242a, #17171b); margin-bottom: 0.4rem;
   }
   .arena-side-name { font-size: 0.72rem; color: var(--text-dim); }
-  .arena-vs { font-family: 'Archivo Black', sans-serif; font-size: 0.72rem; color: var(--accent); }
+  .arena-vs {
+    font-family: 'Archivo Black', sans-serif; font-size: 0.78rem; color: var(--accent);
+    width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
   .vote-bar { height: 8px; border-radius: 4px; background: var(--panel-2); overflow: hidden; display: flex; margin-bottom: 0.4rem; }
-  .vote-fill-a { background: var(--accent); }
-  .vote-fill-b { background: #3a3a40; }
+  .vote-fill-a { background: var(--accent); transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+  .vote-fill-b { background: #3a3a40; transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
   .vote-meta { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.6rem; }
   .vote-actions { display: flex; gap: 0.5rem; }
   .vote-btn {
-    flex: 1; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--border);
-    background: var(--panel-2); color: var(--text); font-weight: 600; font-size: 0.8rem;
+    flex: 1; padding: 0.65rem; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--panel-2); color: var(--text); font-weight: 700; font-size: 0.8rem;
     cursor: pointer;
+    transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease;
   }
   .vote-btn:hover { border-color: var(--accent); }
+  .vote-btn:active { transform: scale(0.94); }
   .vote-btn:disabled { opacity: 0.4; cursor: default; }
-  .voted-tag { font-size: 0.72rem; color: var(--win); text-align: center; }
+  .voted-tag { font-size: 0.75rem; color: var(--win); text-align: center; font-weight: 700; animation: popIn 0.35s ease; }
 
   .lb-row {
     display: flex;
@@ -318,7 +396,9 @@
     margin-bottom: 0.4rem;
     background: var(--panel);
     border: 1px solid var(--border);
+    transition: transform 0.15s ease, border-color 0.15s ease;
   }
+  .lb-row:hover { border-color: #3a3a40; }
   .lb-row.me { border-color: var(--accent); background: rgba(255,61,46,0.08); }
   .lb-rank {
     font-family: 'Archivo Black', sans-serif;
@@ -328,7 +408,7 @@
     text-align: center;
     flex-shrink: 0;
   }
-  .lb-rank.gold { color: var(--gold); }
+  .lb-rank.gold { color: var(--gold); text-shadow: 0 0 12px rgba(255,201,74,0.6); }
   .lb-rank.silver { color: var(--silver); }
   .lb-rank.bronze { color: var(--bronze); }
   .lb-avatar {
@@ -343,7 +423,7 @@
   .lb-score-num { font-family: 'Archivo Black', sans-serif; font-size: 0.9rem; }
   .lb-score-label { font-size: 0.6rem; color: var(--text-dim); }
 
-  .profile-head { text-align: center; padding: 1rem 0 1.2rem; }
+  .profile-head { text-align: center; padding: 1rem 0 1.2rem; animation: popIn 0.4s ease; }
   .avatar {
     width: 72px; height: 72px; border-radius: 50%;
     background: linear-gradient(135deg, #FF3D2E, #B8281C); margin: 0 auto 0.6rem;
@@ -376,39 +456,81 @@
     height: var(--tabbar-h);
     display: flex;
     border-top: 1px solid var(--border);
-    background: var(--bg);
+    background: rgba(14,14,16,0.95);
+    backdrop-filter: blur(8px);
     z-index: 20;
   }
   .tab {
     flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem;
-    font-size: 0.65rem; color: var(--text-dim); font-weight: 600;
+    font-size: 0.62rem; color: var(--text-dim); font-weight: 700;
     background: none; border: none; cursor: pointer;
+    position: relative;
+    transition: color 0.15s ease;
   }
+  .tab-icon { font-size: 1.3rem; transition: transform 0.2s ease; }
   .tab.active { color: var(--accent); }
+  .tab.active .tab-icon { animation: tabPop 0.35s ease; }
+  .tab-indicator {
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 3px;
+    border-radius: 0 0 4px 4px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+  }
+  .tab.active .tab-indicator { transform: scaleX(1); }
 
   .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    position: fixed; inset: 0; background: rgba(0,0,0,0.65);
     display: none; align-items: flex-end; justify-content: center; z-index: 50;
+    opacity: 0;
+    transition: opacity 0.2s ease;
   }
-  .modal-overlay.open { display: flex; }
+  .modal-overlay.open { display: flex; opacity: 1; }
   .modal {
     background: var(--panel); border-top: 1px solid var(--border);
     border-radius: 16px 16px 0 0; padding: 1.5rem 1.25rem 2rem;
     width: 100%; max-width: 480px; max-height: 85vh; overflow-y: auto;
+    animation: fadeInUp 0.25s ease;
   }
   .modal-title { font-family: 'Archivo Black', sans-serif; font-size: 1.1rem; margin-bottom: 1rem; }
-  .modal-close { float: right; background: none; border: none; color: var(--text-dim); font-size: 1.2rem; cursor: pointer; }
+  .modal-close { float: right; background: none; border: none; color: var(--text-dim); font-size: 1.2rem; cursor: pointer; transition: transform 0.12s ease; }
+  .modal-close:active { transform: scale(0.85) rotate(90deg); }
 
   .fab {
     position: fixed;
     bottom: calc(var(--tabbar-h) + 1rem);
     left: 50%;
     transform: translateX(calc(-50% + 190px));
-    width: 52px; height: 52px; border-radius: 50%; background: var(--accent);
-    color: #fff; font-size: 1.5rem; border: none; cursor: pointer;
+    width: 54px; height: 54px; border-radius: 50%; background: var(--accent);
+    color: #fff; font-size: 1.6rem; border: none; cursor: pointer;
     box-shadow: 0 6px 20px rgba(255,61,46,0.4); z-index: 21;
+    animation: pulseGlow 2.2s ease-in-out infinite;
+    transition: transform 0.15s ease;
   }
-  @media (max-width: 540px) { .fab { left: auto; right: 1.1rem; transform: none; } }
+  .fab:active { transform: translateX(calc(-50% + 190px)) scale(0.88); }
+  @media (max-width: 540px) { .fab { left: auto; right: 1.1rem; transform: none; } .fab:active { transform: scale(0.88); } }
+
+  .toast {
+    position: fixed;
+    top: calc(var(--topbar-h) + 0.75rem);
+    left: 50%;
+    background: var(--panel);
+    border: 1px solid var(--win);
+    color: var(--text);
+    padding: 0.7rem 1.1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    z-index: 60;
+    animation: toastIn 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    white-space: nowrap;
+  }
+  .toast.error { border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -432,6 +554,14 @@ let myVotedChallengeIds = new Set();
 const app = document.getElementById('app');
 const modalOverlay = document.getElementById('modal-overlay');
 const modalContent = document.getElementById('modal-content');
+
+function showToast(message, isError) {
+  const el = document.createElement('div');
+  el.className = 'toast' + (isError ? ' error' : '');
+  el.textContent = message;
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.transition = 'opacity 0.3s ease'; el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 2200);
+}
 
 async function initAuth() {
   const { data } = await sb.auth.getSession();
@@ -522,6 +652,9 @@ function renderAuthScreen() {
   });
 }
 
+const TAB_ICONS = { feed: '📸', arena: '⚔️', leaderboard: '🏆', record: '📊' };
+const TAB_LABELS = { feed: 'Feed', arena: 'Arena', leaderboard: 'Board', record: 'Record' };
+
 function renderApp() {
   app.innerHTML = `
     <div class="topbar">
@@ -531,10 +664,13 @@ function renderApp() {
     <div class="content" id="content"></div>
     ${activeTab === 'feed' ? '<button class="fab" id="fab-post">+</button>' : ''}
     <div class="tabbar">
-      <button class="tab ${activeTab === 'feed' ? 'active' : ''}" data-tab="feed">Feed</button>
-      <button class="tab ${activeTab === 'arena' ? 'active' : ''}" data-tab="arena">Arena</button>
-      <button class="tab ${activeTab === 'leaderboard' ? 'active' : ''}" data-tab="leaderboard">Board</button>
-      <button class="tab ${activeTab === 'record' ? 'active' : ''}" data-tab="record">Record</button>
+      ${['feed','arena','leaderboard','record'].map(t => `
+        <button class="tab ${activeTab === t ? 'active' : ''}" data-tab="${t}">
+          <div class="tab-indicator"></div>
+          <span class="tab-icon">${TAB_ICONS[t]}</span>
+          <span>${TAB_LABELS[t]}</span>
+        </button>
+      `).join('')}
     </div>
   `;
   document.getElementById('logout-btn').addEventListener('click', logout);
@@ -550,9 +686,13 @@ function renderApp() {
   if (activeTab === 'record') loadRecord();
 }
 
+function loadingHtml() {
+  return `<div class="empty-state"><div class="loading-dots"><span></span><span></span><span></span></div></div>`;
+}
+
 async function loadFeed() {
   const content = document.getElementById('content');
-  content.innerHTML = `<div class="empty-state">Loading...</div>`;
+  content.innerHTML = loadingHtml();
 
   const { data: posts, error } = await sb
     .from('posts')
@@ -569,8 +709,8 @@ async function loadFeed() {
     return;
   }
 
-  content.innerHTML = posts.map(p => `
-    <div class="post-card">
+  content.innerHTML = posts.map((p, i) => `
+    <div class="post-card fade-item" style="animation-delay:${i * 0.05}s">
       ${p.is_sample ? '<div class="sample-badge">Sample</div>' : ''}
       <div class="post-media">${p.category || 'Photo'}</div>
       <div class="post-body">
@@ -623,6 +763,7 @@ function openNewPostModal() {
       msg.className = 'status-msg error';
     } else {
       closeModal();
+      showToast('Posted! Someone can call you out now.');
       loadFeed();
     }
   });
@@ -640,7 +781,7 @@ function formatTimeLeft(expiresAt) {
 
 async function loadArena() {
   const content = document.getElementById('content');
-  content.innerHTML = `<div class="empty-state">Loading...</div>`;
+  content.innerHTML = loadingHtml();
 
   const { data: challenges, error } = await sb
     .from('challenges')
@@ -668,14 +809,14 @@ async function loadArena() {
     .eq('voter_id', session.user.id);
   myVotedChallengeIds = new Set((myVotes || []).map(v => v.challenge_id));
 
-  const listHtml = challenges.map(c => {
+  const listHtml = challenges.map((c, i) => {
     const total = (c.votes_a || 0) + (c.votes_b || 0);
     const pctA = total ? Math.round((c.votes_a / total) * 100) : 50;
     const pctB = 100 - pctA;
     const voted = myVotedChallengeIds.has(c.id);
     const timer = formatTimeLeft(c.expires_at);
     return `
-      <div class="arena-card">
+      <div class="arena-card fade-item" style="animation-delay:${i * 0.05}s">
         ${c.is_sample ? '<div class="sample-badge">Sample</div>' : ''}
         <div class="arena-element">${escapeHtml(c.element)}</div>
         <div class="arena-timer ${timer.urgent ? 'urgent' : ''}">⏱ ${timer.text}</div>
@@ -685,8 +826,8 @@ async function loadArena() {
           <div class="arena-side"><div class="arena-thumb"></div><div class="arena-side-name">${escapeHtml(c.postB?.title || 'Post B')}</div></div>
         </div>
         <div class="vote-bar">
-          <div class="vote-fill-a" style="width:${pctA}%"></div>
-          <div class="vote-fill-b" style="width:${pctB}%"></div>
+          <div class="vote-fill-a" style="width:${voted ? pctA : 50}%"></div>
+          <div class="vote-fill-b" style="width:${voted ? pctB : 50}%"></div>
         </div>
         <div class="vote-meta"><span>${pctA}%</span><span>${pctB}%</span></div>
         ${voted
@@ -718,15 +859,16 @@ async function castVote(challengeId, option) {
     challenge_id: challengeId, voter_id: session.user.id, option
   });
   if (error && error.code !== '23505') {
-    alert(error.message);
+    showToast(error.message, true);
     return;
   }
+  showToast('Vote locked in!');
   loadArena();
 }
 
 async function loadLeaderboard() {
   const content = document.getElementById('content');
-  content.innerHTML = `<div class="empty-state">Loading...</div>`;
+  content.innerHTML = loadingHtml();
 
   const { data: belts } = await sb
     .from('belts')
@@ -746,8 +888,8 @@ async function loadLeaderboard() {
 
   const beltIcons = { 'Cars': '🏎️', 'Homes': '🏡', 'Motorcycles': '🏍️', 'Timepieces': '⏱️', 'Custom Gear': '🔥' };
 
-  const beltsHtml = (belts || []).map(b => `
-    <div class="belt-card">
+  const beltsHtml = (belts || []).map((b, i) => `
+    <div class="belt-card fade-item" style="animation-delay:${i * 0.06}s">
       <div class="belt-icon">${beltIcons[b.category] || '🏆'}</div>
       <div class="belt-info">
         <div class="belt-category">${escapeHtml(b.category)} Champion</div>
@@ -769,7 +911,7 @@ async function loadLeaderboard() {
     const medalClass = pos === 1 ? 'gold' : pos === 2 ? 'silver' : pos === 3 ? 'bronze' : '';
     const isMe = session && p.id === session.user.id;
     return `
-      <div class="lb-row ${isMe ? 'me' : ''}">
+      <div class="lb-row fade-item ${isMe ? 'me' : ''}" style="animation-delay:${i * 0.03}s">
         <div class="lb-rank ${medalClass}">${pos}</div>
         <div class="lb-avatar"></div>
         <div class="lb-info">
@@ -804,7 +946,7 @@ async function loadLeaderboard() {
 
 async function loadRecord() {
   const content = document.getElementById('content');
-  content.innerHTML = `<div class="empty-state">Loading...</div>`;
+  content.innerHTML = loadingHtml();
 
   const { data: profile, error: profileErr } = await sb
     .from('profiles')
@@ -894,6 +1036,7 @@ function openChallengeModal(opponentPostId, opponentId) {
       msg.className = 'status-msg error';
     } else {
       closeModal();
+      showToast('Challenge sent! It\'s live in the Arena.');
       activeTab = 'arena';
       renderApp();
     }
