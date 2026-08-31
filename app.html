@@ -63,7 +63,7 @@
 
   .auth-form { width: 100%; max-width: 320px; }
 
-  input[type="email"], input[type="text"], input[type="number"], textarea, select {
+  input[type="email"], input[type="text"], input[type="number"], input[type="password"], textarea, select {
     width: 100%;
     font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
@@ -97,6 +97,23 @@
   .status-msg { font-size: 0.85rem; margin-top: 0.75rem; min-height: 1.2rem; }
   .status-msg.success { color: var(--win); }
   .status-msg.error { color: var(--accent); }
+
+  .auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .auth-divider::before, .auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
 
   .topbar {
     display: flex;
@@ -286,6 +303,11 @@ async function sendMagicLink(email) {
   return error;
 }
 
+async function signInWithPassword(email, password) {
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  return error;
+}
+
 async function logout() {
   await sb.auth.signOut();
   session = null;
@@ -309,6 +331,10 @@ function renderAuthScreen() {
         <input type="email" id="auth-email" placeholder="your@email.com" />
         <button class="btn btn-primary" id="auth-submit">Send magic link</button>
         <div class="status-msg" id="auth-msg"></div>
+        <div class="auth-divider">or</div>
+        <input type="password" id="auth-password" placeholder="Password" />
+        <button class="btn btn-ghost" id="password-submit">Sign in with password</button>
+        <div class="status-msg" id="password-msg"></div>
       </div>
     </div>
   `;
@@ -328,6 +354,22 @@ function renderAuthScreen() {
     } else {
       msg.textContent = 'Check your email for the sign-in link.';
       msg.className = 'status-msg success';
+    }
+  });
+  document.getElementById('password-submit').addEventListener('click', async () => {
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value;
+    const msg = document.getElementById('password-msg');
+    const btn = document.getElementById('password-submit');
+    if (!email || !password) { msg.textContent = 'Enter email and password.'; msg.className = 'status-msg error'; return; }
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+    const error = await signInWithPassword(email, password);
+    btn.disabled = false;
+    btn.textContent = 'Sign in with password';
+    if (error) {
+      msg.textContent = error.message;
+      msg.className = 'status-msg error';
     }
   });
 }
