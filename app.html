@@ -37,7 +37,6 @@
     border-right: 1px solid var(--border);
   }
 
-  /* ---------- AUTH SCREEN ---------- */
   .auth-screen {
     flex: 1;
     display: flex;
@@ -99,7 +98,6 @@
   .status-msg.success { color: var(--win); }
   .status-msg.error { color: var(--accent); }
 
-  /* ---------- TOPBAR ---------- */
   .topbar {
     display: flex;
     align-items: center;
@@ -123,7 +121,6 @@
     font-size: 0.9rem;
   }
 
-  /* ---------- CONTENT ---------- */
   .content {
     flex: 1;
     overflow-y: auto;
@@ -137,7 +134,6 @@
     font-size: 0.9rem;
   }
 
-  /* Feed */
   .post-card {
     background: var(--panel);
     border: 1px solid var(--border);
@@ -163,7 +159,6 @@
   }
   .chip-callout { background: var(--accent); color: #fff; }
 
-  /* Arena */
   .arena-card {
     background: var(--panel); border: 1px solid var(--border);
     border-radius: 12px; padding: 0.9rem; margin-bottom: 0.9rem;
@@ -194,7 +189,6 @@
   .vote-btn:disabled { opacity: 0.4; cursor: default; }
   .voted-tag { font-size: 0.72rem; color: var(--win); text-align: center; }
 
-  /* Profile */
   .profile-head { text-align: center; padding: 1rem 0 1.2rem; }
   .avatar {
     width: 72px; height: 72px; border-radius: 50%;
@@ -218,7 +212,6 @@
   .loss-tag { background: var(--panel-2); color: var(--text-dim); }
   .logout-btn { margin-top: 1.5rem; }
 
-  /* ---------- TABBAR ---------- */
   .tabbar {
     display: flex;
     border-top: 1px solid var(--border);
@@ -231,7 +224,6 @@
   }
   .tab.active { color: var(--accent); }
 
-  /* ---------- MODAL ---------- */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.6);
     display: none; align-items: flex-end; justify-content: center; z-index: 50;
@@ -264,16 +256,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-/* ============================================================
-   CONFIG — drop in your real Supabase project values
-   ============================================================ */
 const SUPABASE_URL = 'https://cpjbnjcwpmcvasechmwx.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwamJuamN3cG1jdmFzZWNobXd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxNTM1NTQsImV4cCI6MjEwMzcyOTU1NH0.DnmZh785ix4CnlmIyPnB93YrYyfOUZCdweeZQkXY8k8';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* ============================================================
-   STATE
-   ============================================================ */
 let session = null;
 let activeTab = 'feed';
 let myVotedChallengeIds = new Set();
@@ -282,9 +268,6 @@ const app = document.getElementById('app');
 const modalOverlay = document.getElementById('modal-overlay');
 const modalContent = document.getElementById('modal-content');
 
-/* ============================================================
-   AUTH
-   ============================================================ */
 async function initAuth() {
   const { data } = await supabase.auth.getSession();
   session = data.session;
@@ -309,9 +292,6 @@ async function logout() {
   render();
 }
 
-/* ============================================================
-   RENDER — ROOT
-   ============================================================ */
 function render() {
   if (!session) {
     renderAuthScreen();
@@ -352,14 +332,11 @@ function renderAuthScreen() {
   });
 }
 
-/* ============================================================
-   RENDER — MAIN APP SHELL
-   ============================================================ */
 function renderApp() {
   app.innerHTML = `
     <div class="topbar">
       <div class="topbar-logo">Stand<span>Off</span></div>
-      <button class="icon-btn" id="logout-btn">⎋</button>
+      <button class="icon-btn" id="logout-btn">⏋</button>
     </div>
     <div class="content" id="content"></div>
     ${activeTab === 'feed' ? '<button class="fab" id="fab-post">+</button>' : ''}
@@ -381,9 +358,6 @@ function renderApp() {
   if (activeTab === 'record') loadRecord();
 }
 
-/* ============================================================
-   FEED
-   ============================================================ */
 async function loadFeed() {
   const content = document.getElementById('content');
   content.innerHTML = `<div class="empty-state">Loading...</div>`;
@@ -461,9 +435,6 @@ function openNewPostModal() {
   });
 }
 
-/* ============================================================
-   ARENA
-   ============================================================ */
 async function loadArena() {
   const content = document.getElementById('content');
   content.innerHTML = `<div class="empty-state">Loading...</div>`;
@@ -539,9 +510,6 @@ async function castVote(challengeId, option) {
   loadArena();
 }
 
-/* ============================================================
-   RECORD (PROFILE)
-   ============================================================ */
 async function loadRecord() {
   const content = document.getElementById('content');
   content.innerHTML = `<div class="empty-state">Loading...</div>`;
@@ -593,9 +561,6 @@ async function loadRecord() {
   document.getElementById('record-logout').addEventListener('click', logout);
 }
 
-/* ============================================================
-   CHALLENGE MODAL (from Feed → creates a Challenge against a post)
-   ============================================================ */
 function openChallengeModal(opponentPostId, opponentId) {
   modalContent.innerHTML = `
     <button class="modal-close" id="modal-close">✕</button>
@@ -611,8 +576,6 @@ function openChallengeModal(opponentPostId, opponentId) {
     const msg = document.getElementById('challenge-msg');
     if (!element) { msg.textContent = 'Say what you\'re settling.'; msg.className = 'status-msg error'; return; }
 
-    // Fetch one of my own posts to use as postB — in a full build this
-    // would be a picker; kept simple here since the schema/flow is what matters.
     const { data: myPosts } = await supabase
       .from('posts')
       .select('id')
@@ -650,9 +613,6 @@ function closeModal() {
   modalContent.innerHTML = '';
 }
 
-/* ============================================================
-   UTIL
-   ============================================================ */
 function escapeHtml(str) {
   if (!str) return '';
   const div = document.createElement('div');
