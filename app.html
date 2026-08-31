@@ -28,16 +28,19 @@
     background: var(--bg);
     color: var(--text);
     font-family: 'Inter', sans-serif;
+    overflow: hidden;
   }
 
   #app {
     max-width: 480px;
     margin: 0 auto;
     height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     border-left: 1px solid var(--border);
     border-right: 1px solid var(--border);
+    overflow: hidden;
   }
 
   .auth-screen {
@@ -125,6 +128,7 @@
     justify-content: space-between;
     padding: 1rem 1.1rem;
     border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
   }
   .topbar-logo { font-family: 'Archivo Black', sans-serif; font-size: 1.1rem; }
   .topbar-logo span { color: var(--accent); }
@@ -144,7 +148,9 @@
 
   .content {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 1rem 1.1rem 5rem;
   }
 
@@ -361,6 +367,7 @@
     display: flex;
     border-top: 1px solid var(--border);
     background: var(--bg);
+    flex-shrink: 0;
   }
   .tab {
     flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
