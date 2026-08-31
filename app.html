@@ -263,7 +263,9 @@
     justify-content: center;
     position: relative;
     z-index: 1;
+    overflow: hidden;
   }
+  .belt-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 9px; }
   .belt-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
   .belt-category {
     font-size: 0.65rem; font-weight: 700; color: var(--gold);
@@ -306,11 +308,13 @@
   }
   .post-card:hover { border-color: #3a3a40; transform: translateY(-1px); }
   .post-media {
-    height: 140px;
+    height: 160px;
     background: linear-gradient(135deg, #24242a, #17171b);
     display: flex; align-items: center; justify-content: center;
     font-size: 0.75rem; color: var(--text-dim);
+    overflow: hidden;
   }
+  .post-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .post-body { padding: 0.8rem 0.95rem 0.95rem; }
   .post-user { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.2rem; }
   .post-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.3rem; }
@@ -362,9 +366,11 @@
   .arena-matchup { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.7rem; }
   .arena-side { flex: 1; text-align: center; }
   .arena-thumb {
-    width: 100%; height: 70px; border-radius: 8px;
+    width: 100%; height: 84px; border-radius: 8px;
     background: linear-gradient(135deg, #24242a, #17171b); margin-bottom: 0.4rem;
+    overflow: hidden;
   }
+  .arena-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .arena-side-name { font-size: 0.72rem; color: var(--text-dim); }
   .arena-vs {
     font-family: 'Archivo Black', sans-serif; font-size: 0.78rem; color: var(--accent);
@@ -696,7 +702,7 @@ async function loadFeed() {
 
   const { data: posts, error } = await sb
     .from('posts')
-    .select('id, title, description, user_id, category, is_sample, profiles(username)')
+    .select('id, title, description, user_id, category, is_sample, profiles(username), media(url)')
     .order('created_at', { ascending: false })
     .limit(20);
 
@@ -712,7 +718,7 @@ async function loadFeed() {
   content.innerHTML = posts.map((p, i) => `
     <div class="post-card fade-item" style="animation-delay:${i * 0.05}s">
       ${p.is_sample ? '<div class="sample-badge">Sample</div>' : ''}
-      <div class="post-media">${p.category || 'Photo'}</div>
+      <div class="post-media">${p.media && p.media[0] ? `<img src="${p.media[0].url}" alt="${escapeHtml(p.title)}" loading="lazy" />` : (p.category || 'Photo')}</div>
       <div class="post-body">
         <div class="post-user">@${p.profiles?.username || 'unknown'}</div>
         <div class="post-title">${escapeHtml(p.title)}</div>
@@ -787,8 +793,8 @@ async function loadArena() {
     .from('challenges')
     .select(`
       id, element, votes_a, votes_b, status, is_sample, expires_at,
-      postA:post_a_id ( title ),
-      postB:post_b_id ( title )
+      postA:post_a_id ( title, media(url) ),
+      postB:post_b_id ( title, media(url) )
     `)
     .eq('status', 'Active')
     .order('expires_at', { ascending: true })
@@ -815,15 +821,17 @@ async function loadArena() {
     const pctB = 100 - pctA;
     const voted = myVotedChallengeIds.has(c.id);
     const timer = formatTimeLeft(c.expires_at);
+    const imgA = c.postA?.media && c.postA.media[0] ? `<img src="${c.postA.media[0].url}" loading="lazy" />` : '';
+    const imgB = c.postB?.media && c.postB.media[0] ? `<img src="${c.postB.media[0].url}" loading="lazy" />` : '';
     return `
       <div class="arena-card fade-item" style="animation-delay:${i * 0.05}s">
         ${c.is_sample ? '<div class="sample-badge">Sample</div>' : ''}
         <div class="arena-element">${escapeHtml(c.element)}</div>
         <div class="arena-timer ${timer.urgent ? 'urgent' : ''}">⏱ ${timer.text}</div>
         <div class="arena-matchup">
-          <div class="arena-side"><div class="arena-thumb"></div><div class="arena-side-name">${escapeHtml(c.postA?.title || 'Post A')}</div></div>
+          <div class="arena-side"><div class="arena-thumb">${imgA}</div><div class="arena-side-name">${escapeHtml(c.postA?.title || 'Post A')}</div></div>
           <div class="arena-vs">VS</div>
-          <div class="arena-side"><div class="arena-thumb"></div><div class="arena-side-name">${escapeHtml(c.postB?.title || 'Post B')}</div></div>
+          <div class="arena-side"><div class="arena-thumb">${imgB}</div><div class="arena-side-name">${escapeHtml(c.postB?.title || 'Post B')}</div></div>
         </div>
         <div class="vote-bar">
           <div class="vote-fill-a" style="width:${voted ? pctA : 50}%"></div>
@@ -872,7 +880,7 @@ async function loadLeaderboard() {
 
   const { data: belts } = await sb
     .from('belts')
-    .select('category, defense_count, is_sample, current_holder_post_id, current_holder_user_id, holder:profiles!current_holder_user_id(username), item:posts!current_holder_post_id(title)')
+    .select('category, defense_count, is_sample, current_holder_post_id, current_holder_user_id, holder:profiles!current_holder_user_id(username), item:posts!current_holder_post_id(title, media(url))')
     .order('category', { ascending: true });
 
   const { data: profiles, error } = await sb
@@ -888,9 +896,11 @@ async function loadLeaderboard() {
 
   const beltIcons = { 'Cars': '🏎️', 'Homes': '🏡', 'Motorcycles': '🏍️', 'Timepieces': '⏱️', 'Custom Gear': '🔥' };
 
-  const beltsHtml = (belts || []).map((b, i) => `
+  const beltsHtml = (belts || []).map((b, i) => {
+    const img = b.item?.media && b.item.media[0] ? `<img src="${b.item.media[0].url}" loading="lazy" />` : (beltIcons[b.category] || '🏆');
+    return `
     <div class="belt-card fade-item" style="animation-delay:${i * 0.06}s">
-      <div class="belt-icon">${beltIcons[b.category] || '🏆'}</div>
+      <div class="belt-icon">${img}</div>
       <div class="belt-info">
         <div class="belt-category">${escapeHtml(b.category)} Champion</div>
         <div class="belt-champ">@${escapeHtml(b.holder?.username || 'unknown')}</div>
@@ -899,7 +909,8 @@ async function loadLeaderboard() {
       </div>
       <button class="belt-challenge-btn" data-post-id="${b.current_holder_post_id}" data-owner-id="${b.current_holder_user_id}">Challenge</button>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   if (!profiles.length) {
     content.innerHTML = `<div class="empty-state">No one on the board yet.</div>`;
