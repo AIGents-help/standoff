@@ -6,236 +6,43 @@
 <title>StandOff — Prove It.</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600&display=swap');
-
-  :root {
-    --bg: #0E0E10;
-    --panel-a: #16161A;
-    --panel-b: #1C1C20;
-    --text: #F2F1ED;
-    --text-dim: #8A8A90;
-    --accent: #FF3D2E;
-  }
-
+  :root { --bg: #0E0E10; --panel-a: #16161A; --panel-b: #1C1C20; --text: #F2F1ED; --text-dim: #8A8A90; --accent: #FF3D2E; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
-  }
-
-  /* ---------- HERO: split screen VS ---------- */
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .split {
-    position: relative;
-    flex: 1;
-    display: flex;
-    min-height: 78vh;
-  }
-
-  .panel {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+  .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; }
+  .split { position: relative; flex: 1; display: flex; min-height: 78vh; }
+  .panel { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
   .panel-a { background: var(--panel-a); }
   .panel-b { background: var(--panel-b); }
-
-  .panel-label {
-    font-family: 'Archivo Black', sans-serif;
-    font-size: clamp(2rem, 6vw, 4.5rem);
-    letter-spacing: -0.02em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    opacity: 0.35;
-    transition: opacity 0.4s ease, color 0.4s ease;
-  }
-
-  .panel:hover .panel-label {
-    opacity: 0.9;
-    color: var(--text);
-  }
-
+  .panel-label { font-family: 'Archivo Black', sans-serif; font-size: clamp(2rem, 6vw, 4.5rem); letter-spacing: -0.02em; color: var(--text-dim); text-transform: uppercase; opacity: 0.35; transition: opacity 0.4s ease, color 0.4s ease; }
+  .panel:hover .panel-label { opacity: 0.9; color: var(--text); }
   .panel-a .panel-label { text-align: right; padding-right: 8vw; }
   .panel-b .panel-label { text-align: left; padding-left: 8vw; }
-
-  .vs-divider {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 100%;
-    width: 2px;
-    background: var(--accent);
-    z-index: 2;
-  }
-
-  .vs-badge {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--bg);
-    border: 2px solid var(--accent);
-    border-radius: 50%;
-    width: clamp(64px, 8vw, 96px);
-    height: clamp(64px, 8vw, 96px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Archivo Black', sans-serif;
-    font-size: clamp(1rem, 2vw, 1.4rem);
-    color: var(--accent);
-    z-index: 3;
-    box-shadow: 0 0 40px rgba(255, 61, 46, 0.25);
-  }
-
-  .hero-content {
-    text-align: center;
-    padding: 4.5rem 1.5rem 3.5rem;
-  }
-
-  .wordmark {
-    font-family: 'Archivo Black', sans-serif;
-    font-size: clamp(2.5rem, 7vw, 5rem);
-    letter-spacing: -0.03em;
-    line-height: 1;
-    margin-bottom: 0.75rem;
-  }
-
+  .vs-divider { position: absolute; top: 0; left: 50%; transform: translateX(-50%); height: 100%; width: 2px; background: var(--accent); z-index: 2; }
+  .vs-badge { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg); border: 2px solid var(--accent); border-radius: 50%; width: clamp(64px, 8vw, 96px); height: clamp(64px, 8vw, 96px); display: flex; align-items: center; justify-content: center; font-family: 'Archivo Black', sans-serif; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--accent); z-index: 3; box-shadow: 0 0 40px rgba(255, 61, 46, 0.25); }
+  .hero-content { text-align: center; padding: 4.5rem 1.5rem 3.5rem; }
+  .wordmark { font-family: 'Archivo Black', sans-serif; font-size: clamp(2.5rem, 7vw, 5rem); letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.75rem; }
   .wordmark span { color: var(--accent); }
-
-  .tagline {
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    color: var(--text-dim);
-    font-weight: 500;
-    margin-bottom: 2rem;
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.5;
-  }
-
-  .cta-row {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 0.95rem;
-    padding: 0.9rem 1.75rem;
-    border-radius: 6px;
-    text-decoration: none;
-    display: inline-block;
-    transition: transform 0.15s ease, opacity 0.15s ease;
-  }
-
+  .tagline { font-size: clamp(1rem, 2vw, 1.25rem); color: var(--text-dim); font-weight: 500; margin-bottom: 2rem; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.5; }
+  .cta-row { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+  .btn { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.95rem; padding: 0.9rem 1.75rem; border-radius: 6px; text-decoration: none; display: inline-block; transition: transform 0.15s ease, opacity 0.15s ease; }
   .btn:hover { transform: translateY(-1px); }
-
-  .btn-primary {
-    background: var(--accent);
-    color: #fff;
-  }
-
-  .btn-secondary {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid #333338;
-  }
-
-  .email-input {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
-    padding: 0.9rem 1rem;
-    border-radius: 6px;
-    border: 1px solid #333338;
-    background: var(--panel-a);
-    color: var(--text);
-    min-width: 240px;
-    outline: none;
-  }
-
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-secondary { background: transparent; color: var(--text); border: 1px solid #333338; }
+  .email-input { font-family: 'Inter', sans-serif; font-size: 0.95rem; padding: 0.9rem 1rem; border-radius: 6px; border: 1px solid #333338; background: var(--panel-a); color: var(--text); min-width: 240px; outline: none; }
   .email-input:focus { border-color: var(--accent); }
-
-  .btn-primary:disabled {
-    opacity: 0.6;
-    cursor: default;
-    transform: none;
-  }
-
-  .waitlist-msg {
-    font-size: 0.85rem;
-    margin-top: 0.75rem;
-    min-height: 1.2rem;
-  }
-
+  .waitlist-msg { font-size: 0.85rem; margin-top: 0.75rem; min-height: 1.2rem; }
   .waitlist-msg.success { color: #4ADE80; }
   .waitlist-msg.error { color: var(--accent); }
-
-  /* ---------- HOW IT WORKS ---------- */
-  .how {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 5rem 1.5rem;
-    border-top: 1px solid #1E1E22;
-  }
-
-  .how-row {
-    display: flex;
-    gap: 1.5rem;
-    padding: 1.75rem 0;
-    border-bottom: 1px solid #1E1E22;
-    align-items: baseline;
-  }
-
+  .how { max-width: 720px; margin: 0 auto; padding: 5rem 1.5rem; border-top: 1px solid #1E1E22; }
+  .how-row { display: flex; gap: 1.5rem; padding: 1.75rem 0; border-bottom: 1px solid #1E1E22; align-items: baseline; }
   .how-row:last-child { border-bottom: none; }
-
-  .how-verb {
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 1.1rem;
-    color: var(--accent);
-    min-width: 90px;
-  }
-
-  .how-desc {
-    color: var(--text-dim);
-    font-size: 1rem;
-    line-height: 1.6;
-  }
-
+  .how-verb { font-family: 'Archivo Black', sans-serif; font-size: 1.1rem; color: var(--accent); min-width: 90px; }
+  .how-desc { color: var(--text-dim); font-size: 1rem; line-height: 1.6; }
   .how-desc strong { color: var(--text); font-weight: 600; }
-
-  /* ---------- FOOTER ---------- */
-  footer {
-    padding: 2.5rem 1.5rem;
-    text-align: center;
-    color: var(--text-dim);
-    font-size: 0.85rem;
-    border-top: 1px solid #1E1E22;
-  }
-
-  footer a {
-    color: var(--text-dim);
-    text-decoration: none;
-    margin: 0 0.75rem;
-  }
-
+  footer { padding: 2.5rem 1.5rem; text-align: center; color: var(--text-dim); font-size: 0.85rem; border-top: 1px solid #1E1E22; }
+  footer a { color: var(--text-dim); text-decoration: none; margin: 0 0.75rem; }
   footer a:hover { color: var(--text); }
-
   @media (max-width: 640px) {
     .split { flex-direction: column; min-height: auto; }
     .panel { min-height: 22vh; }
@@ -259,17 +66,14 @@
       <div class="wordmark">Stand<span>Off</span></div>
       <p class="tagline">Post what you own. Put it up against someone else's. Let the crowd decide who's actually got it.</p>
       <form id="waitlist-form" class="cta-row" onsubmit="return false;">
-        <input
-          type="email"
-          id="waitlist-email"
-          placeholder="your@email.com"
-          required
-          class="email-input"
-        />
+        <input type="email" id="waitlist-email" placeholder="your@email.com" required class="email-input" />
         <button type="submit" id="waitlist-btn" class="btn btn-primary">Get notified at launch</button>
       </form>
       <div id="waitlist-msg" class="waitlist-msg"></div>
-      <a href="#how" class="btn btn-secondary" style="margin-top: 0.75rem;">How it works</a>
+      <div class="cta-row" style="margin-top: 0.75rem;">
+        <a href="/app.html" class="btn btn-primary">Launch live demo</a>
+        <a href="#how" class="btn btn-secondary">How it works</a>
+      </div>
     </div>
   </div>
 
@@ -297,45 +101,34 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Replace with your real project values (Supabase dashboard > Settings > API).
-    // The anon/public key is safe to expose client-side — RLS on the
-    // `waitlist` table (insert-only, no select) is what keeps this secure.
     const SUPABASE_URL = 'https://cpjbnjcwpmcvasechmwx.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwamJuamN3cG1jdmFzZWNobXd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxNTM1NTQsImV4cCI6MjEwMzcyOTU1NH0.DnmZh785ix4CnlmIyPnB93YrYyfOUZCdweeZQkXY8k8';
-
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
     const form = document.getElementById('waitlist-form');
     const emailInput = document.getElementById('waitlist-email');
     const btn = document.getElementById('waitlist-btn');
     const msg = document.getElementById('waitlist-msg');
-
     form.addEventListener('submit', async () => {
       const email = emailInput.value.trim();
       if (!email) return;
-
       btn.disabled = true;
       btn.textContent = 'Joining...';
       msg.textContent = '';
       msg.className = 'waitlist-msg';
-
       const { error } = await supabase.from('waitlist').insert({ email });
-
       if (error) {
-        // Unique constraint violation = already signed up; treat as success.
         if (error.code === '23505') {
           msg.textContent = "You're already on the list.";
           msg.classList.add('success');
         } else {
-          msg.textContent = 'Something went wrong — try again.';
+          msg.textContent = 'Something went wrong, try again.';
           msg.classList.add('error');
         }
       } else {
-        msg.textContent = "You're in. We'll email you at launch.";
+        msg.textContent = "You're in. We will email you at launch.";
         msg.classList.add('success');
         emailInput.value = '';
       }
-
       btn.disabled = false;
       btn.textContent = 'Get notified at launch';
     });
