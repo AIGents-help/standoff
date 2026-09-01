@@ -25,110 +25,43 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  html, body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-  }
-
+  html, body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
   body { min-height: 100vh; }
 
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes popIn {
-    0% { transform: scale(0.9); opacity: 0; }
-    60% { transform: scale(1.03); opacity: 1; }
-    100% { transform: scale(1); }
-  }
-  @keyframes pulseGlow {
-    0%, 100% { box-shadow: 0 6px 20px rgba(255,61,46,0.4); }
-    50% { box-shadow: 0 6px 28px rgba(255,61,46,0.75); }
-  }
-  @keyframes beltShine {
-    0% { background-position: -150% 0; }
-    100% { background-position: 250% 0; }
-  }
-  @keyframes dotBounce {
-    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-    40% { transform: scale(1); opacity: 1; }
-  }
-  @keyframes toastIn {
-    from { transform: translate(-50%, -20px); opacity: 0; }
-    to { transform: translate(-50%, 0); opacity: 1; }
-  }
-  @keyframes tabPop {
-    0% { transform: scale(1); }
-    40% { transform: scale(1.25); }
-    100% { transform: scale(1); }
-  }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 60% { transform: scale(1.03); opacity: 1; } 100% { transform: scale(1); } }
+  @keyframes pulseGlow { 0%, 100% { box-shadow: 0 6px 20px rgba(255,61,46,0.4); } 50% { box-shadow: 0 6px 28px rgba(255,61,46,0.75); } }
+  @keyframes beltShine { 0% { background-position: -150% 0; } 100% { background-position: 250% 0; } }
+  @keyframes dotBounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+  @keyframes toastIn { from { transform: translate(-50%, -20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+  @keyframes tabPop { 0% { transform: scale(1); } 40% { transform: scale(1.25); } 100% { transform: scale(1); } }
+  @keyframes vsSlideLeft { to { transform: translateX(0); } }
+  @keyframes vsSlideRight { to { transform: translateX(0); } }
+  @keyframes vsFadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes vsBadgePop { 0% { transform: translate(-50%,-50%) scale(0) rotate(-20deg); } 60% { transform: translate(-50%,-50%) scale(1.15) rotate(6deg); } 100% { transform: translate(-50%,-50%) scale(1) rotate(0); } }
+  @keyframes vsStampSlam { 0% { opacity: 0; transform: translate(-50%,-50%) scale(3) rotate(-8deg); } 60% { opacity: 1; transform: translate(-50%,-50%) scale(0.9) rotate(-8deg); } 100% { opacity: 1; transform: translate(-50%,-50%) scale(1) rotate(-8deg); } }
+  @keyframes vsFlashPulse { 0% { opacity: 0; } 20% { opacity: 1; } 40% { opacity: 0; } 100% { opacity: 0; } }
+  @keyframes vsFadeOut { to { opacity: 0; } }
+  @keyframes vsShake { 10%,90% { transform: translate3d(-2px,0,0); } 20%,80% { transform: translate3d(3px,0,0); } 30%,50%,70% { transform: translate3d(-5px,0,0); } 40%,60% { transform: translate3d(5px,0,0); } }
 
-  #app {
-    max-width: 480px;
-    margin: 0 auto;
-    min-height: 100vh;
-    position: relative;
-    border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-  }
+  #app { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 
-  .auth-screen {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    text-align: center;
-  }
-
-  .auth-logo {
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    animation: popIn 0.5s ease;
-  }
+  .auth-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+  .auth-logo { font-family: 'Archivo Black', sans-serif; font-size: 2rem; margin-bottom: 0.5rem; animation: popIn 0.5s ease; }
   .auth-logo span { color: var(--accent); }
-
-  .auth-sub {
-    color: var(--text-dim);
-    font-size: 0.95rem;
-    margin-bottom: 2rem;
-    max-width: 300px;
-  }
-
+  .auth-sub { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 2rem; max-width: 300px; }
   .auth-form { width: 100%; max-width: 320px; }
 
   input[type="email"], input[type="text"], input[type="number"], input[type="password"], textarea, select {
-    width: 100%;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
-    padding: 0.85rem 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--panel);
-    color: var(--text);
-    outline: none;
-    margin-bottom: 0.75rem;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    width: 100%; font-family: 'Inter', sans-serif; font-size: 0.95rem; padding: 0.85rem 1rem;
+    border-radius: 8px; border: 1px solid var(--border); background: var(--panel); color: var(--text);
+    outline: none; margin-bottom: 0.75rem; transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
   input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,61,46,0.15); }
 
-  .btn {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    padding: 0.85rem 1.25rem;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    transition: opacity 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
-  }
+  .btn { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.95rem; padding: 0.85rem 1.25rem; border-radius: 8px; border: none; cursor: pointer; width: 100%; transition: opacity 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease; }
   .btn:active { transform: scale(0.96); }
   .btn:disabled { opacity: 0.5; cursor: default; }
-
   .btn-primary { background: var(--accent); color: #fff; }
   .btn-primary:hover { box-shadow: 0 4px 16px rgba(255,61,46,0.4); }
   .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
@@ -138,290 +71,84 @@
   .status-msg.success { color: var(--win); }
   .status-msg.error { color: var(--accent); animation: popIn 0.25s ease; }
 
-  .auth-divider {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin: 1.25rem 0;
-    color: var(--text-dim);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .auth-divider::before, .auth-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+  .auth-divider { display: flex; align-items: center; gap: 0.75rem; margin: 1.25rem 0; color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  .topbar {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    height: var(--topbar-h);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1.1rem;
-    background: rgba(14,14,16,0.92);
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid var(--border);
-  }
+  .topbar { position: sticky; top: 0; z-index: 20; height: var(--topbar-h); display: flex; align-items: center; justify-content: space-between; padding: 0 1.1rem; background: rgba(14,14,16,0.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); }
   .topbar-logo { font-family: 'Archivo Black', sans-serif; font-size: 1.1rem; }
   .topbar-logo span { color: var(--accent); }
-  .icon-btn {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    border-radius: 8px;
-    width: 34px;
-    height: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: transform 0.12s ease, border-color 0.15s ease;
-  }
+  .icon-btn { background: var(--panel); border: 1px solid var(--border); color: var(--text-dim); border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9rem; transition: transform 0.12s ease; }
   .icon-btn:active { transform: scale(0.9); }
 
-  .content {
-    padding: 1rem 1.1rem;
-    padding-bottom: calc(var(--tabbar-h) + 4.5rem);
-    min-height: calc(100vh - var(--topbar-h));
-  }
+  .content { padding: 1rem 1.1rem; padding-bottom: calc(var(--tabbar-h) + 4.5rem); min-height: calc(100vh - var(--topbar-h)); }
 
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 0.9rem;
-  }
-  .section-title {
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 1rem;
-  }
-  .section-sub {
-    font-size: 0.72rem;
-    color: var(--text-dim);
-  }
+  .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.9rem; }
+  .section-title { font-family: 'Archivo Black', sans-serif; font-size: 1rem; }
+  .section-sub { font-size: 0.72rem; color: var(--text-dim); }
 
-  .empty-state {
-    text-align: center;
-    color: var(--text-dim);
-    padding: 3rem 1rem;
-    font-size: 0.9rem;
-  }
-
+  .empty-state { text-align: center; color: var(--text-dim); padding: 3rem 1rem; font-size: 0.9rem; }
   .loading-dots { display: inline-flex; gap: 0.3rem; }
-  .loading-dots span {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--accent);
-    animation: dotBounce 1.2s infinite ease-in-out;
-  }
+  .loading-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: dotBounce 1.2s infinite ease-in-out; }
   .loading-dots span:nth-child(2) { animation-delay: 0.15s; }
   .loading-dots span:nth-child(3) { animation-delay: 0.3s; }
+  .fade-item { animation: fadeInUp 0.35s ease both; }
 
-  .fade-item {
-    animation: fadeInUp 0.35s ease both;
-  }
-
-  .belt-card {
-    background: linear-gradient(135deg, #1c1710, #16161A);
-    border: 1px solid #3a2e12;
-    border-radius: 12px;
-    padding: 0.9rem;
-    margin-bottom: 0.7rem;
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    overflow: hidden;
-    transition: transform 0.15s ease;
-  }
+  .belt-card { background: linear-gradient(135deg, #1c1710, #16161A); border: 1px solid #3a2e12; border-radius: 12px; padding: 0.9rem; margin-bottom: 0.7rem; position: relative; display: flex; align-items: center; gap: 0.75rem; overflow: hidden; transition: transform 0.15s ease; }
   .belt-card:active { transform: scale(0.98); }
-  .belt-card::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(100deg, transparent 40%, rgba(255,201,74,0.18) 50%, transparent 60%);
-    background-size: 200% 100%;
-    animation: beltShine 3.5s ease-in-out infinite;
-    pointer-events: none;
-  }
-  .belt-icon {
-    font-size: 1.6rem;
-    flex-shrink: 0;
-    width: 44px;
-    height: 44px;
-    background: rgba(255,201,74,0.1);
-    border: 1px solid var(--gold);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-  }
+  .belt-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(100deg, transparent 40%, rgba(255,201,74,0.18) 50%, transparent 60%); background-size: 200% 100%; animation: beltShine 3.5s ease-in-out infinite; pointer-events: none; }
+  .belt-icon { font-size: 1.6rem; flex-shrink: 0; width: 44px; height: 44px; background: rgba(255,201,74,0.1); border: 1px solid var(--gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; overflow: hidden; }
   .belt-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 9px; }
   .belt-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
-  .belt-category {
-    font-size: 0.65rem; font-weight: 700; color: var(--gold);
-    text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.15rem;
-  }
+  .belt-category { font-size: 0.65rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.15rem; }
   .belt-champ { font-weight: 700; font-size: 0.85rem; }
   .belt-item { font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.3rem; }
-  .belt-defense {
-    font-size: 0.65rem; color: var(--text-dim);
-    display: inline-block;
-    background: var(--panel-2);
-    padding: 0.15rem 0.45rem;
-    border-radius: 10px;
-  }
+  .belt-defense { font-size: 0.65rem; color: var(--text-dim); display: inline-block; background: var(--panel-2); padding: 0.15rem 0.45rem; border-radius: 10px; }
   .belt-defense.untested { color: var(--gold); border: 1px solid var(--gold); background: transparent; }
-  .belt-challenge-btn {
-    flex-shrink: 0;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.72rem;
-    font-weight: 700;
-    cursor: pointer;
-    position: relative;
-    z-index: 1;
-    transition: transform 0.12s ease;
-  }
-  .belt-challenge-btn:active { transform: scale(0.92); }
+  .belt-challenge-btn { flex-shrink: 0; background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 0.5rem 0.75rem; font-size: 0.72rem; font-weight: 700; cursor: pointer; position: relative; z-index: 1; }
 
-  .post-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 0.9rem;
-    position: relative;
-    transition: transform 0.15s ease, border-color 0.15s ease;
-  }
+  .post-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 0.9rem; position: relative; transition: transform 0.15s ease, border-color 0.15s ease; }
   .post-card:hover { border-color: #3a3a40; transform: translateY(-1px); }
-  .post-media {
-    height: 160px;
-    background: linear-gradient(135deg, #24242a, #17171b);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.75rem; color: var(--text-dim);
-    overflow: hidden;
-  }
+  .post-media { height: 160px; background: linear-gradient(135deg, #24242a, #17171b); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--text-dim); overflow: hidden; }
   .post-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .post-body { padding: 0.8rem 0.95rem 0.95rem; }
   .post-user { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.2rem; }
   .post-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.3rem; }
   .post-desc { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.7rem; line-height: 1.4; }
-  .post-actions { display: flex; gap: 0.5rem; }
-  .chip {
-    font-size: 0.72rem; font-weight: 600; padding: 0.35rem 0.65rem;
-    border-radius: 20px; background: var(--panel-2); color: var(--text-dim);
-    border: none; cursor: pointer;
-    transition: transform 0.12s ease;
-  }
-  .chip:active { transform: scale(0.92); }
+  .post-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .chip { font-size: 0.72rem; font-weight: 600; padding: 0.35rem 0.65rem; border-radius: 20px; background: var(--panel-2); color: var(--text-dim); border: none; cursor: pointer; }
   .chip-callout { background: var(--accent); color: #fff; }
+  .chip-buy { background: var(--win); color: #0E0E10; font-weight: 700; }
 
-  .sample-badge {
-    position: absolute;
-    top: 0.7rem;
-    right: 0.7rem;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 0.25rem 0.5rem;
-    border-radius: 5px;
-    background: rgba(14,14,16,0.85);
-    border: 1px solid var(--text-dim);
-    color: var(--text-dim);
-    z-index: 2;
-  }
+  .sample-badge { position: absolute; top: 0.7rem; right: 0.7rem; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.25rem 0.5rem; border-radius: 5px; background: rgba(14,14,16,0.85); border: 1px solid var(--text-dim); color: var(--text-dim); z-index: 2; }
+  .sponsor-badge { position: absolute; top: 0.7rem; right: 0.7rem; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.25rem 0.5rem; border-radius: 5px; background: rgba(255,201,74,0.15); border: 1px solid var(--gold); color: var(--gold); z-index: 2; }
 
-  .arena-card {
-    background: var(--panel); border: 1px solid var(--border);
-    border-radius: 12px; padding: 0.9rem; margin-bottom: 0.9rem;
-    position: relative;
-    transition: transform 0.15s ease;
-  }
+  .arena-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 0.9rem; margin-bottom: 0.9rem; position: relative; transition: transform 0.15s ease; }
   .arena-card:hover { transform: translateY(-1px); }
-  .arena-element {
-    font-size: 0.7rem; color: var(--accent); font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.6rem;
-    padding-right: 4.5rem;
-  }
-  .arena-timer {
-    font-size: 0.68rem;
-    color: var(--text-dim);
-    margin-bottom: 0.6rem;
-  }
+  .arena-element { font-size: 0.7rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.6rem; padding-right: 4.5rem; }
+  .arena-timer { font-size: 0.68rem; color: var(--text-dim); margin-bottom: 0.6rem; }
   .arena-timer.urgent { color: var(--accent); font-weight: 700; animation: dotBounce 1.4s infinite; }
   .arena-matchup { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.7rem; }
   .arena-side { flex: 1; text-align: center; }
-  .arena-thumb {
-    width: 100%; height: 84px; border-radius: 8px;
-    background: linear-gradient(135deg, #24242a, #17171b); margin-bottom: 0.4rem;
-    overflow: hidden;
-  }
+  .arena-thumb { width: 100%; height: 84px; border-radius: 8px; background: linear-gradient(135deg, #24242a, #17171b); margin-bottom: 0.4rem; overflow: hidden; }
   .arena-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .arena-side-name { font-size: 0.72rem; color: var(--text-dim); }
-  .arena-vs {
-    font-family: 'Archivo Black', sans-serif; font-size: 0.78rem; color: var(--accent);
-    width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--accent);
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
+  .arena-vs { font-family: 'Archivo Black', sans-serif; font-size: 0.78rem; color: var(--accent); width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .vote-bar { height: 8px; border-radius: 4px; background: var(--panel-2); overflow: hidden; display: flex; margin-bottom: 0.4rem; }
   .vote-fill-a { background: var(--accent); transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
   .vote-fill-b { background: #3a3a40; transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
   .vote-meta { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.6rem; }
   .vote-actions { display: flex; gap: 0.5rem; }
-  .vote-btn {
-    flex: 1; padding: 0.65rem; border-radius: 8px; border: 1px solid var(--border);
-    background: var(--panel-2); color: var(--text); font-weight: 700; font-size: 0.8rem;
-    cursor: pointer;
-    transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease;
-  }
-  .vote-btn:hover { border-color: var(--accent); }
-  .vote-btn:active { transform: scale(0.94); }
+  .vote-btn { flex: 1; padding: 0.65rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel-2); color: var(--text); font-weight: 700; font-size: 0.8rem; cursor: pointer; }
   .vote-btn:disabled { opacity: 0.4; cursor: default; }
   .voted-tag { font-size: 0.75rem; color: var(--win); text-align: center; font-weight: 700; animation: popIn 0.35s ease; }
 
-  .lb-row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.7rem 0.6rem;
-    border-radius: 10px;
-    margin-bottom: 0.4rem;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    transition: transform 0.15s ease, border-color 0.15s ease;
-  }
-  .lb-row:hover { border-color: #3a3a40; }
+  .lb-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.6rem; border-radius: 10px; margin-bottom: 0.4rem; background: var(--panel); border: 1px solid var(--border); }
   .lb-row.me { border-color: var(--accent); background: rgba(255,61,46,0.08); }
-  .lb-rank {
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 0.95rem;
-    color: var(--text-dim);
-    width: 28px;
-    text-align: center;
-    flex-shrink: 0;
-  }
+  .lb-rank { font-family: 'Archivo Black', sans-serif; font-size: 0.95rem; color: var(--text-dim); width: 28px; text-align: center; flex-shrink: 0; }
   .lb-rank.gold { color: var(--gold); text-shadow: 0 0 12px rgba(255,201,74,0.6); }
   .lb-rank.silver { color: var(--silver); }
   .lb-rank.bronze { color: var(--bronze); }
-  .lb-avatar {
-    width: 34px; height: 34px; border-radius: 50%;
-    background: linear-gradient(135deg, #FF3D2E, #B8281C);
-    flex-shrink: 0;
-  }
+  .lb-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #FF3D2E, #B8281C); flex-shrink: 0; }
   .lb-info { flex: 1; min-width: 0; }
   .lb-name { font-weight: 700; font-size: 0.85rem; }
   .lb-tier { font-size: 0.65rem; color: var(--accent); font-weight: 600; text-transform: uppercase; }
@@ -430,114 +157,64 @@
   .lb-score-label { font-size: 0.6rem; color: var(--text-dim); }
 
   .profile-head { text-align: center; padding: 1rem 0 1.2rem; animation: popIn 0.4s ease; }
-  .avatar {
-    width: 72px; height: 72px; border-radius: 50%;
-    background: linear-gradient(135deg, #FF3D2E, #B8281C); margin: 0 auto 0.6rem;
-  }
+  .avatar { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #FF3D2E, #B8281C); margin: 0 auto 0.6rem; }
   .profile-name { font-weight: 700; font-size: 1.05rem; }
-  .profile-rank { font-size: 0.78rem; color: var(--accent); font-weight: 700; margin-top: 0.15rem; letter-spacing: 0.02em; }
-  .stat-row {
-    display: flex; justify-content: space-around; padding: 1rem 0;
-    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 1rem;
-  }
+  .profile-rank { font-size: 0.78rem; color: var(--accent); font-weight: 700; margin-top: 0.15rem; }
+  .stat-row { display: flex; justify-content: space-around; padding: 1rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
   .stat { text-align: center; }
   .stat-num { font-family: 'Archivo Black', sans-serif; font-size: 1.15rem; }
   .stat-label { font-size: 0.65rem; color: var(--text-dim); margin-top: 0.1rem; }
-  .record-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 0.7rem 0.1rem; border-bottom: 1px solid var(--border); font-size: 0.8rem;
-  }
+  .record-row { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0.1rem; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
   .record-result { font-weight: 700; font-size: 0.7rem; padding: 0.25rem 0.55rem; border-radius: 6px; }
   .win-tag { background: rgba(255,61,46,0.15); color: var(--accent); }
   .loss-tag { background: var(--panel-2); color: var(--text-dim); }
   .share-btn { margin-top: 1.5rem; }
   .logout-btn { margin-top: 0.75rem; }
 
-  .tabbar {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 480px;
-    height: var(--tabbar-h);
-    display: flex;
-    border-top: 1px solid var(--border);
-    background: rgba(14,14,16,0.95);
-    backdrop-filter: blur(8px);
-    z-index: 20;
-  }
-  .tab {
-    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem;
-    font-size: 0.62rem; color: var(--text-dim); font-weight: 700;
-    background: none; border: none; cursor: pointer;
-    position: relative;
-    transition: color 0.15s ease;
-  }
-  .tab-icon { font-size: 1.3rem; transition: transform 0.2s ease; }
+  .market-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 0.9rem; margin-bottom: 0.9rem; }
+  .market-price { font-family: 'Archivo Black', sans-serif; font-size: 1.3rem; color: var(--win); margin: 0.4rem 0; }
+  .market-bid-row { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+  .market-bid-row input { margin-bottom: 0; flex: 1; }
+  .auction-timer { font-size: 0.72rem; color: var(--text-dim); }
+  .auction-timer.urgent { color: var(--accent); font-weight: 700; }
+  .sell-type-row { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .sell-type-btn { flex: 1; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel-2); color: var(--text-dim); font-size: 0.78rem; font-weight: 600; cursor: pointer; }
+  .sell-type-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(255,61,46,0.08); }
+
+  .tabbar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; height: var(--tabbar-h); display: flex; border-top: 1px solid var(--border); background: rgba(14,14,16,0.95); backdrop-filter: blur(8px); z-index: 20; }
+  .tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.15rem; font-size: 0.58rem; color: var(--text-dim); font-weight: 700; background: none; border: none; cursor: pointer; position: relative; }
+  .tab-icon { font-size: 1.15rem; }
   .tab.active { color: var(--accent); }
   .tab.active .tab-icon { animation: tabPop 0.35s ease; }
-  .tab-indicator {
-    position: absolute;
-    top: 0;
-    left: 20%;
-    right: 20%;
-    height: 3px;
-    border-radius: 0 0 4px 4px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transition: transform 0.2s ease;
-  }
+  .tab-indicator { position: absolute; top: 0; left: 20%; right: 20%; height: 3px; border-radius: 0 0 4px 4px; background: var(--accent); transform: scaleX(0); transition: transform 0.2s ease; }
   .tab.active .tab-indicator { transform: scaleX(1); }
 
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.65);
-    display: none; align-items: flex-end; justify-content: center; z-index: 50;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: none; align-items: flex-end; justify-content: center; z-index: 50; opacity: 0; transition: opacity 0.2s ease; }
   .modal-overlay.open { display: flex; opacity: 1; }
-  .modal {
-    background: var(--panel); border-top: 1px solid var(--border);
-    border-radius: 16px 16px 0 0; padding: 1.5rem 1.25rem 2rem;
-    width: 100%; max-width: 480px; max-height: 85vh; overflow-y: auto;
-    animation: fadeInUp 0.25s ease;
-  }
+  .modal { background: var(--panel); border-top: 1px solid var(--border); border-radius: 16px 16px 0 0; padding: 1.5rem 1.25rem 2rem; width: 100%; max-width: 480px; max-height: 85vh; overflow-y: auto; animation: fadeInUp 0.25s ease; }
   .modal-title { font-family: 'Archivo Black', sans-serif; font-size: 1.1rem; margin-bottom: 1rem; }
-  .modal-close { float: right; background: none; border: none; color: var(--text-dim); font-size: 1.2rem; cursor: pointer; transition: transform 0.12s ease; }
-  .modal-close:active { transform: scale(0.85) rotate(90deg); }
+  .modal-close { float: right; background: none; border: none; color: var(--text-dim); font-size: 1.2rem; cursor: pointer; }
 
-  .fab {
-    position: fixed;
-    bottom: calc(var(--tabbar-h) + 1rem);
-    left: 50%;
-    transform: translateX(calc(-50% + 190px));
-    width: 54px; height: 54px; border-radius: 50%; background: var(--accent);
-    color: #fff; font-size: 1.6rem; border: none; cursor: pointer;
-    box-shadow: 0 6px 20px rgba(255,61,46,0.4); z-index: 21;
-    animation: pulseGlow 2.2s ease-in-out infinite;
-    transition: transform 0.15s ease;
-  }
-  .fab:active { transform: translateX(calc(-50% + 190px)) scale(0.88); }
-  @media (max-width: 540px) { .fab { left: auto; right: 1.1rem; transform: none; } .fab:active { transform: scale(0.88); } }
+  .fab { position: fixed; bottom: calc(var(--tabbar-h) + 1rem); left: 50%; transform: translateX(calc(-50% + 190px)); width: 54px; height: 54px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 1.6rem; border: none; cursor: pointer; box-shadow: 0 6px 20px rgba(255,61,46,0.4); z-index: 21; animation: pulseGlow 2.2s ease-in-out infinite; }
+  @media (max-width: 540px) { .fab { left: auto; right: 1.1rem; transform: none; } }
 
-  .toast {
-    position: fixed;
-    top: calc(var(--topbar-h) + 0.75rem);
-    left: 50%;
-    background: var(--panel);
-    border: 1px solid var(--win);
-    color: var(--text);
-    padding: 0.7rem 1.1rem;
-    border-radius: 10px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    z-index: 60;
-    animation: toastIn 0.3s ease;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    white-space: nowrap;
-  }
+  .toast { position: fixed; top: calc(var(--topbar-h) + 0.75rem); left: 50%; background: var(--panel); border: 1px solid var(--win); color: var(--text); padding: 0.7rem 1.1rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; z-index: 60; animation: toastIn 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.4); white-space: nowrap; }
   .toast.error { border-color: var(--accent); }
+
+  .vs-intro { position: fixed; inset: 0; z-index: 200; background: #000; overflow: hidden; }
+  .vs-intro.shake { animation: vsShake 0.4s; }
+  .vs-intro.closing { animation: vsFadeOut 0.35s ease forwards; }
+  .vs-intro-bg-flash { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,61,46,0.35), transparent 60%); opacity: 0; animation: vsFlashPulse 2.4s ease forwards; }
+  .vs-intro-side { position: absolute; top: 0; bottom: 0; width: 50%; overflow: hidden; }
+  .vs-intro-side.left { left: 0; transform: translateX(-100%); animation: vsSlideLeft 0.5s cubic-bezier(.2,.8,.2,1) forwards; }
+  .vs-intro-side.right { right: 0; transform: translateX(100%); animation: vsSlideRight 0.5s cubic-bezier(.2,.8,.2,1) forwards; }
+  .vs-intro-side img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.55) saturate(1.1); }
+  .vs-intro-side::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent 40%); }
+  .vs-intro-name { position: absolute; bottom: 14%; left: 0; right: 0; text-align: center; font-family: 'Archivo Black'; font-size: clamp(1rem,4vw,1.6rem); color: #F2F1ED; padding: 0 1rem; text-shadow: 0 2px 10px rgba(0,0,0,0.8); z-index: 2; opacity: 0; animation: vsFadeUp 0.4s ease forwards; animation-delay: 0.5s; }
+  .vs-intro-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0) rotate(-20deg); z-index: 5; animation: vsBadgePop 0.5s cubic-bezier(.34,1.56,.64,1) forwards; animation-delay: 0.45s; }
+  .vs-intro-badge { width: clamp(70px,14vw,110px); height: clamp(70px,14vw,110px); border-radius: 50%; background: #0E0E10; border: 4px solid var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Archivo Black'; font-size: clamp(1.3rem,4vw,2rem); color: var(--accent); box-shadow: 0 0 40px rgba(255,61,46,0.7); }
+  .vs-intro-element { position: absolute; top: 62%; left: 0; right: 0; text-align: center; font-family: 'Inter'; font-weight: 700; font-size: clamp(0.85rem,3vw,1.1rem); color: #8A8A90; text-transform: uppercase; letter-spacing: 0.04em; z-index: 5; opacity: 0; padding: 0 2rem; animation: vsFadeUp 0.4s ease forwards; animation-delay: 0.95s; }
+  .vs-intro-stamp { position: absolute; top: 15%; left: 50%; font-family: 'Archivo Black'; font-size: clamp(1.8rem,9vw,3.4rem); color: var(--accent); transform: translate(-50%,-50%) scale(3) rotate(-8deg); opacity: 0; z-index: 6; text-shadow: 0 0 30px rgba(255,61,46,0.8); animation: vsStampSlam 0.35s ease forwards; animation-delay: 1.3s; }
 </style>
 </head>
 <body>
@@ -572,21 +249,34 @@ function showToast(message, isError) {
   setTimeout(() => { el.style.transition = 'opacity 0.3s ease'; el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 2200);
 }
 
+function showVsIntro(leftTitle, leftImg, rightTitle, rightImg, element, onDone) {
+  const overlay = document.createElement('div');
+  overlay.className = 'vs-intro';
+  overlay.innerHTML = `
+    <div class="vs-intro-bg-flash"></div>
+    <div class="vs-intro-side left">${leftImg ? `<img src="${leftImg}">` : ''}<div class="vs-intro-name">${escapeHtml(leftTitle)}</div></div>
+    <div class="vs-intro-side right">${rightImg ? `<img src="${rightImg}">` : ''}<div class="vs-intro-name">${escapeHtml(rightTitle)}</div></div>
+    <div class="vs-intro-center"><div class="vs-intro-badge">VS</div></div>
+    <div class="vs-intro-element">${escapeHtml(element)}</div>
+    <div class="vs-intro-stamp">STANDOFF!</div>
+  `;
+  document.body.appendChild(overlay);
+  setTimeout(() => overlay.classList.add('shake'), 1250);
+  setTimeout(() => {
+    overlay.classList.add('closing');
+    setTimeout(() => { overlay.remove(); if (onDone) onDone(); }, 350);
+  }, 2500);
+}
+
 async function initAuth() {
   const { data } = await sb.auth.getSession();
   session = data.session;
-  sb.auth.onAuthStateChange((_event, newSession) => {
-    session = newSession;
-    render();
-  });
+  sb.auth.onAuthStateChange((_event, newSession) => { session = newSession; render(); });
   render();
 }
 
 async function sendMagicLink(email) {
-  const { error } = await sb.auth.signInWithOtp({
-    email,
-    options: { emailRedirectTo: window.location.href }
-  });
+  const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.href } });
   return error;
 }
 
@@ -595,19 +285,9 @@ async function signInWithPassword(email, password) {
   return error;
 }
 
-async function logout() {
-  await sb.auth.signOut();
-  session = null;
-  render();
-}
+async function logout() { await sb.auth.signOut(); session = null; render(); }
 
-function render() {
-  if (!session) {
-    renderAuthScreen();
-  } else {
-    renderApp();
-  }
-}
+function render() { if (!session) { renderAuthScreen(); } else { renderApp(); } }
 
 function renderAuthScreen() {
   app.innerHTML = `
@@ -630,18 +310,11 @@ function renderAuthScreen() {
     const msg = document.getElementById('auth-msg');
     const btn = document.getElementById('auth-submit');
     if (!email) return;
-    btn.disabled = true;
-    btn.textContent = 'Sending...';
+    btn.disabled = true; btn.textContent = 'Sending...';
     const error = await sendMagicLink(email);
-    btn.disabled = false;
-    btn.textContent = 'Send magic link';
-    if (error) {
-      msg.textContent = error.message;
-      msg.className = 'status-msg error';
-    } else {
-      msg.textContent = 'Check your email for the sign-in link.';
-      msg.className = 'status-msg success';
-    }
+    btn.disabled = false; btn.textContent = 'Send magic link';
+    if (error) { msg.textContent = error.message; msg.className = 'status-msg error'; }
+    else { msg.textContent = 'Check your email for the sign-in link.'; msg.className = 'status-msg success'; }
   });
   document.getElementById('password-submit').addEventListener('click', async () => {
     const email = document.getElementById('auth-email').value.trim();
@@ -649,20 +322,15 @@ function renderAuthScreen() {
     const msg = document.getElementById('password-msg');
     const btn = document.getElementById('password-submit');
     if (!email || !password) { msg.textContent = 'Enter email and password.'; msg.className = 'status-msg error'; return; }
-    btn.disabled = true;
-    btn.textContent = 'Signing in...';
+    btn.disabled = true; btn.textContent = 'Signing in...';
     const error = await signInWithPassword(email, password);
-    btn.disabled = false;
-    btn.textContent = 'Sign in with password';
-    if (error) {
-      msg.textContent = error.message;
-      msg.className = 'status-msg error';
-    }
+    btn.disabled = false; btn.textContent = 'Sign in with password';
+    if (error) { msg.textContent = error.message; msg.className = 'status-msg error'; }
   });
 }
 
-const TAB_ICONS = { feed: '📸', arena: '⚔️', leaderboard: '🏆', record: '📊' };
-const TAB_LABELS = { feed: 'Feed', arena: 'Arena', leaderboard: 'Board', record: 'Record' };
+const TAB_ICONS = { feed: '📸', arena: '⚔️', market: '🛍️', leaderboard: '🏆', record: '📊' };
+const TAB_LABELS = { feed: 'Feed', arena: 'Arena', market: 'Market', leaderboard: 'Board', record: 'Record' };
 
 function renderApp() {
   app.innerHTML = `
@@ -673,7 +341,7 @@ function renderApp() {
     <div class="content" id="content"></div>
     ${activeTab === 'feed' ? '<button class="fab" id="fab-post">+</button>' : ''}
     <div class="tabbar">
-      ${['feed','arena','leaderboard','record'].map(t => `
+      ${['feed','arena','market','leaderboard','record'].map(t => `
         <button class="tab ${activeTab === t ? 'active' : ''}" data-tab="${t}">
           <div class="tab-indicator"></div>
           <span class="tab-icon">${TAB_ICONS[t]}</span>
@@ -691,51 +359,40 @@ function renderApp() {
 
   if (activeTab === 'feed') loadFeed();
   if (activeTab === 'arena') loadArena();
+  if (activeTab === 'market') loadMarket();
   if (activeTab === 'leaderboard') loadLeaderboard();
   if (activeTab === 'record') loadRecord();
 }
 
-function loadingHtml() {
-  return `<div class="empty-state"><div class="loading-dots"><span></span><span></span><span></span></div></div>`;
-}
+function loadingHtml() { return `<div class="empty-state"><div class="loading-dots"><span></span><span></span><span></span></div></div>`; }
 
 async function loadFeed() {
   const content = document.getElementById('content');
   content.innerHTML = loadingHtml();
-
   const { data: posts, error } = await sb
     .from('posts')
-    .select('id, title, description, user_id, category, is_sample, profiles(username), media(url)')
+    .select('id, title, description, user_id, category, is_sample, for_sale, price_cents, sponsor_tagline, profiles(username, is_brand), media(url)')
     .order('created_at', { ascending: false })
     .limit(20);
-
-  if (error) {
-    content.innerHTML = `<div class="empty-state">Couldn't load the feed. ${error.message}</div>`;
-    return;
-  }
-  if (!posts.length) {
-    content.innerHTML = `<div class="empty-state">No posts yet. Be the first to put something up.</div>`;
-    return;
-  }
-
+  if (error) { content.innerHTML = `<div class="empty-state">Couldn't load the feed. ${error.message}</div>`; return; }
+  if (!posts.length) { content.innerHTML = `<div class="empty-state">No posts yet. Be the first to put something up.</div>`; return; }
   content.innerHTML = posts.map((p, i) => `
     <div class="post-card fade-item" style="animation-delay:${i * 0.05}s">
-      ${p.is_sample ? '<div class="sample-badge">Sample</div>' : ''}
+      ${p.profiles?.is_brand ? '<div class="sponsor-badge">Sponsored</div>' : (p.is_sample ? '<div class="sample-badge">Sample</div>' : '')}
       <div class="post-media">${p.media && p.media[0] ? `<img src="${p.media[0].url}" alt="${escapeHtml(p.title)}" loading="lazy" />` : (p.category || 'Photo')}</div>
       <div class="post-body">
-        <div class="post-user">@${p.profiles?.username || 'unknown'}</div>
+        <div class="post-user">@${p.profiles?.username || 'unknown'}${p.sponsor_tagline ? ' — ' + escapeHtml(p.sponsor_tagline) : ''}</div>
         <div class="post-title">${escapeHtml(p.title)}</div>
         ${p.description ? `<div class="post-desc">${escapeHtml(p.description)}</div>` : ''}
         <div class="post-actions">
           <button class="chip chip-callout" data-post-id="${p.id}" data-owner-id="${p.user_id}">Challenge</button>
+          ${p.for_sale && p.price_cents ? `<button class="chip chip-buy" data-post-id="${p.id}">$${(p.price_cents/100).toFixed(0)} · Buy Now</button>` : ''}
         </div>
       </div>
     </div>
   `).join('');
-
-  content.querySelectorAll('.chip-callout').forEach(btn => {
-    btn.addEventListener('click', () => openChallengeModal(btn.dataset.postId, btn.dataset.ownerId));
-  });
+  content.querySelectorAll('.chip-callout').forEach(btn => btn.addEventListener('click', () => openChallengeModal(btn.dataset.postId, btn.dataset.ownerId)));
+  content.querySelectorAll('.chip-buy').forEach(btn => btn.addEventListener('click', () => buyNow(btn.dataset.postId)));
 }
 
 function openNewPostModal() {
@@ -751,31 +408,73 @@ function openNewPostModal() {
     </select>
     <input type="text" id="new-title" placeholder="Title (e.g. '69 Camaro SS)" />
     <textarea id="new-desc" rows="3" placeholder="Description"></textarea>
+    <div class="sell-type-row">
+      <button type="button" class="sell-type-btn active" data-sell="none">Not for sale</button>
+      <button type="button" class="sell-type-btn" data-sell="buy">Buy Now</button>
+      <button type="button" class="sell-type-btn" data-sell="auction">Auction</button>
+    </div>
+    <input type="number" id="new-price" placeholder="Price in USD" style="display:none;" />
+    <input type="number" id="auction-duration" placeholder="Auction length in hours (e.g. 48)" style="display:none;" />
     <button class="btn btn-primary" id="new-submit">Post it</button>
     <div class="status-msg" id="new-msg"></div>
   `;
   modalOverlay.classList.add('open');
+  let sellType = 'none';
   document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.querySelectorAll('.sell-type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sell-type-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      sellType = btn.dataset.sell;
+      document.getElementById('new-price').style.display = (sellType === 'buy' || sellType === 'auction') ? 'block' : 'none';
+      document.getElementById('new-price').placeholder = sellType === 'auction' ? 'Starting price in USD' : 'Price in USD';
+      document.getElementById('auction-duration').style.display = sellType === 'auction' ? 'block' : 'none';
+    });
+  });
   document.getElementById('new-submit').addEventListener('click', async () => {
     const title = document.getElementById('new-title').value.trim();
     const description = document.getElementById('new-desc').value.trim();
     const category = document.getElementById('new-category').value;
+    const priceVal = document.getElementById('new-price').value;
+    const durationVal = document.getElementById('auction-duration').value;
     const msg = document.getElementById('new-msg');
     if (!title) { msg.textContent = 'Title is required.'; msg.className = 'status-msg error'; return; }
-
-    const { error } = await sb.from('posts').insert({
-      user_id: session.user.id, title, description, category
-    });
-
-    if (error) {
-      msg.textContent = error.message;
-      msg.className = 'status-msg error';
-    } else {
-      closeModal();
-      showToast('Posted! Someone can call you out now.');
-      loadFeed();
+    if ((sellType === 'buy' || sellType === 'auction') && (!priceVal || Number(priceVal) <= 0)) {
+      msg.textContent = 'Enter a valid price.'; msg.className = 'status-msg error'; return;
     }
+
+    const insertPayload = { user_id: session.user.id, title, description, category };
+    if (sellType === 'buy') { insertPayload.for_sale = true; insertPayload.price_cents = Math.round(Number(priceVal) * 100); }
+
+    const { data: newPost, error } = await sb.from('posts').insert(insertPayload).select('id').single();
+    if (error) { msg.textContent = error.message; msg.className = 'status-msg error'; return; }
+
+    if (sellType === 'auction') {
+      const hours = Number(durationVal) > 0 ? Number(durationVal) : 48;
+      const { error: aErr } = await sb.from('auctions').insert({
+        post_id: newPost.id,
+        seller_id: session.user.id,
+        starting_price_cents: Math.round(Number(priceVal) * 100),
+        ends_at: new Date(Date.now() + hours * 3600 * 1000).toISOString()
+      });
+      if (aErr) {
+        showToast('Posted, but auction could not start: ' + aErr.message, true);
+        closeModal(); loadFeed(); return;
+      }
+    }
+
+    closeModal();
+    showToast('Posted! Someone can call you out now.');
+    loadFeed();
   });
+}
+
+async function buyNow(postId) {
+  showToast('Opening checkout...');
+  const { data, error } = await sb.functions.invoke('create-checkout-session', { body: { postId } });
+  if (error || !data) { showToast('Checkout failed. Try again.', true); return; }
+  if (data.error) { showToast(data.error, true); return; }
+  if (data.url) window.location.href = data.url;
 }
 
 function formatTimeLeft(expiresAt) {
@@ -791,44 +490,28 @@ function formatTimeLeft(expiresAt) {
 async function loadArena() {
   const content = document.getElementById('content');
   content.innerHTML = loadingHtml();
-
   const { data: challenges, error } = await sb
     .from('challenges')
-    .select(`
-      id, element, votes_a, votes_b, status, is_sample, expires_at,
-      postA:post_a_id ( title, media(url) ),
-      postB:post_b_id ( title, media(url) )
-    `)
+    .select(`id, element, votes_a, votes_b, status, is_sample, expires_at, postA:post_a_id ( title, media(url), profiles(is_brand) ), postB:post_b_id ( title, media(url), profiles(is_brand) )`)
     .eq('status', 'Active')
     .order('expires_at', { ascending: true })
     .limit(30);
-
-  if (error) {
-    content.innerHTML = `<div class="empty-state">Couldn't load the arena. ${error.message}</div>`;
-    return;
-  }
-  if (!challenges.length) {
-    content.innerHTML = `<div class="empty-state">No live challenges right now. Start one from the Feed.</div>`;
-    return;
-  }
-
-  const { data: myVotes } = await sb
-    .from('votes')
-    .select('challenge_id')
-    .eq('voter_id', session.user.id);
+  if (error) { content.innerHTML = `<div class="empty-state">Couldn't load the arena. ${error.message}</div>`; return; }
+  if (!challenges.length) { content.innerHTML = `<div class="empty-state">No live challenges right now. Start one from the Feed.</div>`; return; }
+  const { data: myVotes } = await sb.from('votes').select('challenge_id').eq('voter_id', session.user.id);
   myVotedChallengeIds = new Set((myVotes || []).map(v => v.challenge_id));
-
   const listHtml = challenges.map((c, i) => {
     const total = (c.votes_a || 0) + (c.votes_b || 0);
     const pctA = total ? Math.round((c.votes_a / total) * 100) : 50;
     const pctB = 100 - pctA;
     const voted = myVotedChallengeIds.has(c.id);
     const timer = formatTimeLeft(c.expires_at);
+    const isBrand = c.postA?.profiles?.is_brand || c.postB?.profiles?.is_brand;
     const imgA = c.postA?.media && c.postA.media[0] ? `<img src="${c.postA.media[0].url}" loading="lazy" />` : '';
     const imgB = c.postB?.media && c.postB.media[0] ? `<img src="${c.postB.media[0].url}" loading="lazy" />` : '';
     return `
       <div class="arena-card fade-item" style="animation-delay:${i * 0.05}s">
-        ${c.is_sample ? '<div class="sample-badge">Sample</div>' : ''}
+        ${isBrand ? '<div class="sponsor-badge">Sponsored</div>' : (c.is_sample ? '<div class="sample-badge">Sample</div>' : '')}
         <div class="arena-element">${escapeHtml(c.element)}</div>
         <div class="arena-timer ${timer.urgent ? 'urgent' : ''}">⏱ ${timer.text}</div>
         <div class="arena-matchup">
@@ -836,69 +519,105 @@ async function loadArena() {
           <div class="arena-vs">VS</div>
           <div class="arena-side"><div class="arena-thumb">${imgB}</div><div class="arena-side-name">${escapeHtml(c.postB?.title || 'Post B')}</div></div>
         </div>
-        <div class="vote-bar">
-          <div class="vote-fill-a" style="width:${voted ? pctA : 50}%"></div>
-          <div class="vote-fill-b" style="width:${voted ? pctB : 50}%"></div>
-        </div>
+        <div class="vote-bar"><div class="vote-fill-a" style="width:${voted ? pctA : 50}%"></div><div class="vote-fill-b" style="width:${voted ? pctB : 50}%"></div></div>
         <div class="vote-meta"><span>${pctA}%</span><span>${pctB}%</span></div>
-        ${voted
-          ? `<div class="voted-tag">✓ You voted</div>`
-          : `<div class="vote-actions">
-               <button class="vote-btn" data-id="${c.id}" data-opt="A">Vote A</button>
-               <button class="vote-btn" data-id="${c.id}" data-opt="B">Vote B</button>
-             </div>`
-        }
+        ${voted ? `<div class="voted-tag">✓ You voted</div>` : `<div class="vote-actions"><button class="vote-btn" data-id="${c.id}" data-opt="A">Vote A</button><button class="vote-btn" data-id="${c.id}" data-opt="B">Vote B</button></div>`}
+      </div>
+    `;
+  }).join('');
+  content.innerHTML = `<div class="section-header"><div class="section-title">This Week</div><div class="section-sub">Soonest closing first</div></div>${listHtml}`;
+  content.querySelectorAll('.vote-btn').forEach(btn => btn.addEventListener('click', () => castVote(btn.dataset.id, btn.dataset.opt)));
+}
+
+async function castVote(challengeId, option) {
+  const { error } = await sb.from('votes').insert({ challenge_id: challengeId, voter_id: session.user.id, option });
+  if (error && error.code !== '23505') { showToast(error.message, true); return; }
+  showToast('Vote locked in!');
+  loadArena();
+}
+
+async function loadMarket() {
+  const content = document.getElementById('content');
+  content.innerHTML = loadingHtml();
+
+  const { data: listings } = await sb
+    .from('posts')
+    .select('id, title, price_cents, media(url), profiles(username)')
+    .eq('for_sale', true);
+
+  const { data: auctions, error } = await sb
+    .from('auctions')
+    .select('id, starting_price_cents, current_bid_cents, min_increment_cents, ends_at, status, seller_id, posts(title, media(url)), seller:profiles!seller_id(username)')
+    .eq('status', 'Active')
+    .order('ends_at', { ascending: true });
+
+  if (error) { content.innerHTML = `<div class="empty-state">Couldn't load the market. ${error.message}</div>`; return; }
+
+  const listingsHtml = (listings || []).map(p => `
+    <div class="market-card fade-item">
+      <div class="post-media" style="margin:-0.9rem -0.9rem 0.7rem;">${p.media && p.media[0] ? `<img src="${p.media[0].url}" loading="lazy" />` : 'Photo'}</div>
+      <div class="post-title">${escapeHtml(p.title)}</div>
+      <div class="post-user">@${p.profiles?.username || 'unknown'}</div>
+      <div class="market-price">$${(p.price_cents/100).toFixed(0)}</div>
+      <button class="btn btn-primary chip-buy-full" data-post-id="${p.id}">Buy Now</button>
+    </div>
+  `).join('');
+
+  const auctionsHtml = (auctions || []).map(a => {
+    const timer = formatTimeLeft(a.ends_at);
+    const current = a.current_bid_cents || a.starting_price_cents;
+    const minNext = ((a.current_bid_cents || (a.starting_price_cents - a.min_increment_cents)) + a.min_increment_cents) / 100;
+    return `
+      <div class="market-card fade-item">
+        <div class="post-media" style="margin:-0.9rem -0.9rem 0.7rem;">${a.posts?.media && a.posts.media[0] ? `<img src="${a.posts.media[0].url}" loading="lazy" />` : 'Photo'}</div>
+        <div class="post-title">${escapeHtml(a.posts?.title || 'Item')}</div>
+        <div class="post-user">@${a.seller?.username || 'unknown'} · <span class="auction-timer ${timer.urgent ? 'urgent' : ''}">⏱ ${timer.text}</span></div>
+        <div class="market-price">$${(current/100).toFixed(0)} <span style="font-size:0.7rem;color:var(--text-dim);font-weight:600;">current bid</span></div>
+        <div class="market-bid-row">
+          <input type="number" placeholder="$${minNext.toFixed(0)}+" id="bid-${a.id}" />
+          <button class="btn btn-primary btn-sm" data-auction-id="${a.id}">Bid</button>
+        </div>
       </div>
     `;
   }).join('');
 
   content.innerHTML = `
-    <div class="section-header">
-      <div class="section-title">This Week</div>
-      <div class="section-sub">Soonest closing first</div>
-    </div>
-    ${listHtml}
+    <div class="section-header"><div class="section-title">Buy Now</div><div class="section-sub">${(listings||[]).length} listed</div></div>
+    ${listingsHtml || '<div class="empty-state">Nothing listed yet.</div>'}
+    <div class="section-header" style="margin-top:1.4rem;"><div class="section-title">Timed Auctions</div><div class="section-sub">Belt holders & Elite+</div></div>
+    ${auctionsHtml || '<div class="empty-state">No live auctions right now.</div>'}
   `;
 
-  content.querySelectorAll('.vote-btn').forEach(btn => {
-    btn.addEventListener('click', () => castVote(btn.dataset.id, btn.dataset.opt));
+  content.querySelectorAll('.chip-buy-full').forEach(btn => btn.addEventListener('click', () => buyNow(btn.dataset.postId)));
+  content.querySelectorAll('[data-auction-id]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const auctionId = btn.dataset.auctionId;
+      const input = document.getElementById('bid-' + auctionId);
+      const amount = Number(input.value);
+      if (!amount || amount <= 0) { showToast('Enter a bid amount.', true); return; }
+      const { error } = await sb.from('bids').insert({ auction_id: auctionId, bidder_id: session.user.id, amount_cents: Math.round(amount * 100) });
+      if (error) { showToast(error.message.replace('P0001: ', ''), true); return; }
+      showToast('Bid placed!');
+      loadMarket();
+    });
   });
-}
-
-async function castVote(challengeId, option) {
-  const { error } = await sb.from('votes').insert({
-    challenge_id: challengeId, voter_id: session.user.id, option
-  });
-  if (error && error.code !== '23505') {
-    showToast(error.message, true);
-    return;
-  }
-  showToast('Vote locked in!');
-  loadArena();
 }
 
 async function loadLeaderboard() {
   const content = document.getElementById('content');
   content.innerHTML = loadingHtml();
-
   const { data: belts } = await sb
     .from('belts')
     .select('category, defense_count, is_sample, current_holder_post_id, current_holder_user_id, holder:profiles!current_holder_user_id(username), item:posts!current_holder_post_id(title, media(url))')
     .order('category', { ascending: true });
-
   const { data: profiles, error } = await sb
     .from('profiles')
     .select('id, username, score, trophies, rank')
+    .eq('is_brand', false)
     .order('score', { ascending: false })
     .limit(50);
-
-  if (error) {
-    content.innerHTML = `<div class="empty-state">Couldn't load the leaderboard. ${error.message}</div>`;
-    return;
-  }
-
+  if (error) { content.innerHTML = `<div class="empty-state">Couldn't load the leaderboard. ${error.message}</div>`; return; }
   const beltIcons = { 'Cars': '🏎️', 'Homes': '🏡', 'Motorcycles': '🏍️', 'Timepieces': '⏱️', 'Custom Gear': '🔥' };
-
   const beltsHtml = (belts || []).map((b, i) => {
     const img = b.item?.media && b.item.media[0] ? `<img src="${b.item.media[0].url}" loading="lazy" />` : (beltIcons[b.category] || '🏆');
     return `
@@ -914,12 +633,7 @@ async function loadLeaderboard() {
     </div>
   `;
   }).join('');
-
-  if (!profiles.length) {
-    content.innerHTML = `<div class="empty-state">No one on the board yet.</div>`;
-    return;
-  }
-
+  if (!profiles.length) { content.innerHTML = `<div class="empty-state">No one on the board yet.</div>`; return; }
   const rowsHtml = profiles.map((p, i) => {
     const pos = i + 1;
     const medalClass = pos === 1 ? 'gold' : pos === 2 ? 'silver' : pos === 3 ? 'bronze' : '';
@@ -928,51 +642,25 @@ async function loadLeaderboard() {
       <div class="lb-row fade-item ${isMe ? 'me' : ''}" style="animation-delay:${i * 0.03}s">
         <div class="lb-rank ${medalClass}">${pos}</div>
         <div class="lb-avatar"></div>
-        <div class="lb-info">
-          <div class="lb-name">@${escapeHtml(p.username)}${isMe ? ' (you)' : ''}</div>
-          <div class="lb-tier">${p.rank}</div>
-        </div>
-        <div class="lb-score">
-          <div class="lb-score-num">${p.score}</div>
-          <div class="lb-score-label">${p.trophies} 🏆</div>
-        </div>
+        <div class="lb-info"><div class="lb-name">@${escapeHtml(p.username)}${isMe ? ' (you)' : ''}</div><div class="lb-tier">${p.rank}</div></div>
+        <div class="lb-score"><div class="lb-score-num">${p.score}</div><div class="lb-score-label">${p.trophies} 🏆</div></div>
       </div>
     `;
   }).join('');
-
   content.innerHTML = `
-    <div class="section-header">
-      <div class="section-title">Championship Belts</div>
-      <div class="section-sub">One per category</div>
-    </div>
+    <div class="section-header"><div class="section-title">Championship Belts</div><div class="section-sub">One per category</div></div>
     ${beltsHtml}
-    <div class="section-header" style="margin-top: 1.4rem;">
-      <div class="section-title">Leaderboard</div>
-      <div class="section-sub">Top ${profiles.length}</div>
-    </div>
+    <div class="section-header" style="margin-top: 1.4rem;"><div class="section-title">Leaderboard</div><div class="section-sub">Top ${profiles.length}</div></div>
     ${rowsHtml}
   `;
-
-  content.querySelectorAll('.belt-challenge-btn').forEach(btn => {
-    btn.addEventListener('click', () => openChallengeModal(btn.dataset.postId, btn.dataset.ownerId));
-  });
+  content.querySelectorAll('.belt-challenge-btn').forEach(btn => btn.addEventListener('click', () => openChallengeModal(btn.dataset.postId, btn.dataset.ownerId)));
 }
 
 async function loadRecord() {
   const content = document.getElementById('content');
   content.innerHTML = loadingHtml();
-
-  const { data: profile, error: profileErr } = await sb
-    .from('profiles')
-    .select('username, score, trophies, rank')
-    .eq('id', session.user.id)
-    .single();
-
-  if (profileErr) {
-    content.innerHTML = `<div class="empty-state">Couldn't load your profile. ${profileErr.message}</div>`;
-    return;
-  }
-
+  const { data: profile, error: profileErr } = await sb.from('profiles').select('username, score, trophies, rank').eq('id', session.user.id).single();
+  if (profileErr) { content.innerHTML = `<div class="empty-state">Couldn't load your profile. ${profileErr.message}</div>`; return; }
   const { data: finished } = await sb
     .from('challenges')
     .select('id, element, status, winner_id, challenger_id, opponent_id, postA:post_a_id(title), postB:post_b_id(title)')
@@ -980,27 +668,15 @@ async function loadRecord() {
     .eq('status', 'Finished')
     .order('created_at', { ascending: false })
     .limit(10);
-
   currentProfile = profile;
   currentFinished = finished || [];
-
   const rows = currentFinished.map(c => {
     const won = c.winner_id === session.user.id;
     const opponentTitle = c.challenger_id === session.user.id ? c.postB?.title : c.postA?.title;
-    return `
-      <div class="record-row">
-        <span>vs. ${escapeHtml(opponentTitle || 'Opponent')} — ${escapeHtml(c.element)}</span>
-        <span class="record-result ${won ? 'win-tag' : 'loss-tag'}">${won ? 'WON' : 'LOST'}</span>
-      </div>
-    `;
+    return `<div class="record-row"><span>vs. ${escapeHtml(opponentTitle || 'Opponent')} — ${escapeHtml(c.element)}</span><span class="record-result ${won ? 'win-tag' : 'loss-tag'}">${won ? 'WON' : 'LOST'}</span></div>`;
   }).join('');
-
   content.innerHTML = `
-    <div class="profile-head">
-      <div class="avatar"></div>
-      <div class="profile-name">@${escapeHtml(profile.username)}</div>
-      <div class="profile-rank">${profile.rank.toUpperCase()}</div>
-    </div>
+    <div class="profile-head"><div class="avatar"></div><div class="profile-name">@${escapeHtml(profile.username)}</div><div class="profile-rank">${profile.rank.toUpperCase()}</div></div>
     <div class="stat-row">
       <div class="stat"><div class="stat-num">${profile.score}</div><div class="stat-label">SCORE</div></div>
       <div class="stat"><div class="stat-num">${profile.trophies}</div><div class="stat-label">TROPHIES</div></div>
@@ -1017,141 +693,78 @@ async function loadRecord() {
 async function shareRecordCard() {
   const btn = document.getElementById('share-record-btn');
   const originalText = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = 'Building your card...';
-
+  btn.disabled = true; btn.textContent = 'Building your card...';
   try {
     await document.fonts.load('900 90px "Archivo Black"');
     await document.fonts.load('700 40px "Inter"');
-
     const wins = currentFinished.filter(c => c.winner_id === session.user.id).length;
     const losses = currentFinished.length - wins;
     const profile = currentProfile;
-
     const W = 1080, H = 1350;
     const canvas = document.createElement('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
-
-    ctx.fillStyle = '#0E0E10';
-    ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = '#FF3D2E';
-    ctx.fillRect(0, 0, W, 14);
-
-    ctx.textAlign = 'center';
+    ctx.fillStyle = '#0E0E10'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#FF3D2E'; ctx.fillRect(0, 0, W, 14);
+    ctx.textAlign = 'left';
     ctx.font = '900 64px "Archivo Black", sans-serif';
     const standW = ctx.measureText('Stand').width;
     const offW = ctx.measureText('Off').width;
     const totalW = standW + offW;
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#F2F1ED';
-    ctx.fillText('Stand', W / 2 - totalW / 2, 130);
-    ctx.fillStyle = '#FF3D2E';
-    ctx.fillText('Off', W / 2 - totalW / 2 + standW, 130);
-
+    ctx.fillStyle = '#F2F1ED'; ctx.fillText('Stand', W / 2 - totalW / 2, 130);
+    ctx.fillStyle = '#FF3D2E'; ctx.fillText('Off', W / 2 - totalW / 2 + standW, 130);
     ctx.textAlign = 'center';
-    ctx.font = '600 26px Inter, sans-serif';
-    ctx.fillStyle = '#8A8A90';
-    ctx.fillText('PROVE IT', W / 2, 175);
-
-    ctx.beginPath();
-    ctx.arc(W / 2, 340, 90, 0, Math.PI * 2);
+    ctx.font = '600 26px Inter, sans-serif'; ctx.fillStyle = '#8A8A90'; ctx.fillText('PROVE IT', W / 2, 175);
+    ctx.beginPath(); ctx.arc(W / 2, 340, 90, 0, Math.PI * 2);
     const grad = ctx.createLinearGradient(W/2 - 90, 250, W/2 + 90, 430);
-    grad.addColorStop(0, '#FF3D2E');
-    grad.addColorStop(1, '#B8281C');
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    ctx.font = '900 44px "Archivo Black", sans-serif';
-    ctx.fillStyle = '#F2F1ED';
-    ctx.fillText('@' + profile.username, W / 2, 500);
-
-    ctx.font = '700 30px Inter, sans-serif';
-    ctx.fillStyle = '#FF3D2E';
-    ctx.fillText(profile.rank.toUpperCase(), W / 2, 545);
-
+    grad.addColorStop(0, '#FF3D2E'); grad.addColorStop(1, '#B8281C');
+    ctx.fillStyle = grad; ctx.fill();
+    ctx.font = '900 44px "Archivo Black", sans-serif'; ctx.fillStyle = '#F2F1ED'; ctx.fillText('@' + profile.username, W / 2, 500);
+    ctx.font = '700 30px Inter, sans-serif'; ctx.fillStyle = '#FF3D2E'; ctx.fillText(profile.rank.toUpperCase(), W / 2, 545);
     const statY = 700;
-    const stats = [
-      { num: String(profile.score), label: 'SCORE' },
-      { num: String(profile.trophies), label: 'TROPHIES' },
-      { num: `${wins}-${losses}`, label: 'RECORD' }
-    ];
+    const stats = [{ num: String(profile.score), label: 'SCORE' }, { num: String(profile.trophies), label: 'TROPHIES' }, { num: `${wins}-${losses}`, label: 'RECORD' }];
     const colW = W / 3;
     stats.forEach((s, i) => {
       const cx = colW * i + colW / 2;
-      ctx.font = '900 68px "Archivo Black", sans-serif';
-      ctx.fillStyle = '#F2F1ED';
-      ctx.fillText(s.num, cx, statY);
-      ctx.font = '700 24px Inter, sans-serif';
-      ctx.fillStyle = '#8A8A90';
-      ctx.fillText(s.label, cx, statY + 40);
+      ctx.font = '900 68px "Archivo Black", sans-serif'; ctx.fillStyle = '#F2F1ED'; ctx.fillText(s.num, cx, statY);
+      ctx.font = '700 24px Inter, sans-serif'; ctx.fillStyle = '#8A8A90'; ctx.fillText(s.label, cx, statY + 40);
     });
-
-    ctx.strokeStyle = '#26262B';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(80, 780);
-    ctx.lineTo(W - 80, 780);
-    ctx.stroke();
-
-    ctx.font = '700 30px Inter, sans-serif';
-    ctx.fillStyle = '#F2F1ED';
-    ctx.textAlign = 'left';
-    ctx.fillText('Recent Standoffs', 80, 850);
-
+    ctx.strokeStyle = '#26262B'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(80, 780); ctx.lineTo(W - 80, 780); ctx.stroke();
+    ctx.font = '700 30px Inter, sans-serif'; ctx.fillStyle = '#F2F1ED'; ctx.textAlign = 'left'; ctx.fillText('Recent Standoffs', 80, 850);
     let ry = 910;
     currentFinished.slice(0, 4).forEach(c => {
       const won = c.winner_id === session.user.id;
       const opponentTitle = c.challenger_id === session.user.id ? c.postB?.title : c.postA?.title;
-      ctx.font = '600 26px Inter, sans-serif';
-      ctx.fillStyle = '#8A8A90';
+      ctx.font = '600 26px Inter, sans-serif'; ctx.fillStyle = '#8A8A90';
       const label = 'vs. ' + (opponentTitle || 'Opponent');
       ctx.fillText(label.length > 34 ? label.slice(0, 34) + '…' : label, 80, ry);
-      ctx.textAlign = 'right';
-      ctx.fillStyle = won ? '#FF3D2E' : '#8A8A90';
-      ctx.font = '900 26px "Archivo Black", sans-serif';
-      ctx.fillText(won ? 'WON' : 'LOST', W - 80, ry);
-      ctx.textAlign = 'left';
-      ry += 60;
+      ctx.textAlign = 'right'; ctx.fillStyle = won ? '#FF3D2E' : '#8A8A90';
+      ctx.font = '900 26px "Archivo Black", sans-serif'; ctx.fillText(won ? 'WON' : 'LOST', W - 80, ry);
+      ctx.textAlign = 'left'; ry += 60;
     });
-
     ctx.textAlign = 'center';
-    ctx.font = '700 28px Inter, sans-serif';
-    ctx.fillStyle = '#8A8A90';
-    ctx.fillText('standoffapp.com', W / 2, H - 60);
-    ctx.font = '600 22px Inter, sans-serif';
-    ctx.fillText('Think you can stand up to this?', W / 2, H - 30);
-
+    ctx.font = '700 28px Inter, sans-serif'; ctx.fillStyle = '#8A8A90'; ctx.fillText('standoffapp.com', W / 2, H - 60);
+    ctx.font = '600 22px Inter, sans-serif'; ctx.fillText('Think you can stand up to this?', W / 2, H - 30);
     canvas.toBlob(async (blob) => {
-      btn.disabled = false;
-      btn.textContent = originalText;
+      btn.disabled = false; btn.textContent = originalText;
       const file = new File([blob], 'standoff-record.png', { type: 'image/png' });
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
-          await navigator.share({
-            files: [file],
-            title: 'My StandOff Record',
-            text: `${profile.rank} — ${profile.score} pts — standoffapp.com`
-          });
+          await navigator.share({ files: [file], title: 'My StandOff Record', text: `${profile.rank} — ${profile.score} pts — standoffapp.com` });
           showToast('Shared!');
-        } catch (e) {
-          if (e.name !== 'AbortError') showToast('Could not share.', true);
-        }
+        } catch (e) { if (e.name !== 'AbortError') showToast('Could not share.', true); }
       } else {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
-        a.download = 'standoff-record.png';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        a.href = url; a.download = 'standoff-record.png';
+        document.body.appendChild(a); a.click(); a.remove();
         setTimeout(() => URL.revokeObjectURL(url), 5000);
         showToast('Saved! Post it to your story.');
       }
     }, 'image/png');
   } catch (e) {
-    btn.disabled = false;
-    btn.textContent = originalText;
+    btn.disabled = false; btn.textContent = originalText;
     showToast('Could not build the share card.', true);
   }
 }
@@ -1170,44 +783,28 @@ function openChallengeModal(opponentPostId, opponentId) {
     const element = document.getElementById('challenge-element').value.trim();
     const msg = document.getElementById('challenge-msg');
     if (!element) { msg.textContent = 'Say what you\'re settling.'; msg.className = 'status-msg error'; return; }
-
-    const { data: myPosts } = await sb
-      .from('posts')
-      .select('id')
-      .eq('user_id', session.user.id)
-      .limit(1);
-
-    if (!myPosts || !myPosts.length) {
-      msg.textContent = 'Post something of yours first.';
-      msg.className = 'status-msg error';
-      return;
-    }
-
+    const { data: myPosts } = await sb.from('posts').select('id, title, media(url)').eq('user_id', session.user.id).limit(1);
+    if (!myPosts || !myPosts.length) { msg.textContent = 'Post something of yours first.'; msg.className = 'status-msg error'; return; }
+    const { data: opponentPostRow } = await sb.from('posts').select('title, media(url)').eq('id', opponentPostId).single();
     const { error } = await sb.from('challenges').insert({
-      challenger_id: session.user.id,
-      opponent_id: opponentId,
-      post_a_id: opponentPostId,
-      post_b_id: myPosts[0].id,
-      bet_type: 'Gentleman',
-      element
+      challenger_id: session.user.id, opponent_id: opponentId, post_a_id: opponentPostId,
+      post_b_id: myPosts[0].id, bet_type: 'Gentleman', element
     });
-
-    if (error) {
-      msg.textContent = error.message;
-      msg.className = 'status-msg error';
-    } else {
+    if (error) { msg.textContent = error.message; msg.className = 'status-msg error'; }
+    else {
       closeModal();
-      showToast('Challenge sent! It\'s live in the Arena.');
-      activeTab = 'arena';
-      renderApp();
+      const leftImg = opponentPostRow?.media?.[0]?.url || '';
+      const rightImg = myPosts[0].media?.[0]?.url || '';
+      showVsIntro(opponentPostRow?.title || 'Opponent', leftImg, myPosts[0].title, rightImg, element, () => {
+        showToast('Challenge sent! It\'s live in the Arena.');
+        activeTab = 'arena';
+        renderApp();
+      });
     }
   });
 }
 
-function closeModal() {
-  modalOverlay.classList.remove('open');
-  modalContent.innerHTML = '';
-}
+function closeModal() { modalOverlay.classList.remove('open'); modalContent.innerHTML = ''; }
 
 function escapeHtml(str) {
   if (!str) return '';
