@@ -171,6 +171,15 @@
   .share-btn { margin-top: 1.5rem; }
   .logout-btn { margin-top: 0.75rem; }
 
+  .order-row { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; margin-bottom: 0.5rem; }
+  .order-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.2rem; }
+  .order-meta { font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.5rem; }
+  .order-tag { display: inline-block; font-size: 0.62rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 10px; text-transform: uppercase; }
+  .order-tag.held { background: rgba(255,201,74,0.15); color: var(--gold); }
+  .order-tag.released { background: rgba(74,222,128,0.15); color: var(--win); }
+  .payout-banner { background: rgba(255,201,74,0.08); border: 1px solid var(--gold); border-radius: 10px; padding: 0.8rem; margin-bottom: 1rem; font-size: 0.8rem; }
+  .payout-banner button { margin-top: 0.6rem; }
+
   .market-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 0.9rem; margin-bottom: 0.9rem; }
   .market-price { font-family: 'Archivo Black', sans-serif; font-size: 1.3rem; color: var(--win); margin: 0.4rem 0; }
   .market-bid-row { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
@@ -659,7 +668,11 @@ async function loadLeaderboard() {
 async function loadRecord() {
   const content = document.getElementById('content');
   content.innerHTML = loadingHtml();
-  const { data: profile, error: profileErr } = await sb.from('profiles').select('username, score, trophies, rank').eq('id', session.user.id).single();
+  const { data: profile, error: profileErr } = await sb
+    .from('profiles')
+    .select('username, score, trophies, rank, stripe_connect_account_id, stripe_payouts_enabled')
+    .eq('id', session.user.id)
+    .single();
   if (profileErr) { content.innerHTML = `<div class="empty-state">Couldn't load your profile. ${profileErr.message}</div>`; return; }
   const { data: finished } = await sb
     .from('challenges')
@@ -670,11 +683,50 @@ async function loadRecord() {
     .limit(10);
   currentProfile = profile;
   currentFinished = finished || [];
+
+  const { data: myPurchases } = await sb
+    .from('transactions')
+    .select('id, amount_cents, status, posts(title)')
+    .eq('buyer_id', session.user.id)
+    .in('status', ['held', 'released'])
+    .order('created_at', { ascending: false });
+
+  const { data: mySales } = await sb
+    .from('transactions')
+    .select('id, amount_cents, platform_fee_cents, status, posts(title)')
+    .eq('seller_id', session.user.id)
+    .in('status', ['held', 'released'])
+    .order('created_at', { ascending: false });
+
   const rows = currentFinished.map(c => {
     const won = c.winner_id === session.user.id;
     const opponentTitle = c.challenger_id === session.user.id ? c.postB?.title : c.postA?.title;
     return `<div class="record-row"><span>vs. ${escapeHtml(opponentTitle || 'Opponent')} — ${escapeHtml(c.element)}</span><span class="record-result ${won ? 'win-tag' : 'loss-tag'}">${won ? 'WON' : 'LOST'}</span></div>`;
   }).join('');
+
+  const payoutsReady = profile.stripe_connect_account_id && profile.stripe_payouts_enabled;
+  const payoutBanner = payoutsReady ? '' : `
+    <div class="payout-banner">
+      💳 Set up payouts before you list anything for sale or your buyers can't check out.
+      <button class="btn btn-ghost btn-sm" id="setup-payouts-btn">Set Up Payouts</button>
+    </div>
+  `;
+
+  const purchasesHtml = (myPurchases || []).length ? (myPurchases || []).map(t => `
+    <div class="order-row">
+      <div class="order-title">${escapeHtml(t.posts?.title || 'Item')}</div>
+      <div class="order-meta">$${(t.amount_cents/100).toFixed(0)} · <span class="order-tag ${t.status}">${t.status === 'held' ? 'In escrow' : 'Released'}</span></div>
+      ${t.status === 'held' ? `<button class="btn btn-primary btn-sm" data-confirm-id="${t.id}">Confirm Delivery & Release Payment</button>` : ''}
+    </div>
+  `).join('') : '';
+
+  const salesHtml = (mySales || []).length ? (mySales || []).map(t => `
+    <div class="order-row">
+      <div class="order-title">${escapeHtml(t.posts?.title || 'Item')}</div>
+      <div class="order-meta">You'll receive $${((t.amount_cents - (t.platform_fee_cents||0))/100).toFixed(0)} · <span class="order-tag ${t.status}">${t.status === 'held' ? 'Awaiting buyer confirmation' : 'Paid out'}</span></div>
+    </div>
+  `).join('') : '';
+
   content.innerHTML = `
     <div class="profile-head"><div class="avatar"></div><div class="profile-name">@${escapeHtml(profile.username)}</div><div class="profile-rank">${profile.rank.toUpperCase()}</div></div>
     <div class="stat-row">
@@ -682,12 +734,38 @@ async function loadRecord() {
       <div class="stat"><div class="stat-num">${profile.trophies}</div><div class="stat-label">TROPHIES</div></div>
       <div class="stat"><div class="stat-num">${currentFinished.length}</div><div class="stat-label">SETTLED</div></div>
     </div>
+    ${payoutBanner}
+    ${purchasesHtml ? `<div class="section-header"><div class="section-title">My Orders</div></div>${purchasesHtml}` : ''}
+    ${salesHtml ? `<div class="section-header" style="margin-top:1rem;"><div class="section-title">My Sales</div></div>${salesHtml}` : ''}
+    <div class="section-header" style="margin-top:1rem;"><div class="section-title">Standoffs</div></div>
     ${rows || `<div class="empty-state">No settled challenges yet.</div>`}
     <button class="btn btn-primary share-btn" id="share-record-btn">📲 Share My Record</button>
     <button class="btn btn-ghost logout-btn" id="record-logout">Log out</button>
   `;
   document.getElementById('record-logout').addEventListener('click', logout);
   document.getElementById('share-record-btn').addEventListener('click', shareRecordCard);
+  const payoutsBtn = document.getElementById('setup-payouts-btn');
+  if (payoutsBtn) payoutsBtn.addEventListener('click', setupPayouts);
+  content.querySelectorAll('[data-confirm-id]').forEach(btn => {
+    btn.addEventListener('click', () => confirmDelivery(btn.dataset.confirmId));
+  });
+}
+
+async function setupPayouts() {
+  showToast('Opening Stripe setup...');
+  const { data, error } = await sb.functions.invoke('stripe-connect-onboard', { body: {} });
+  if (error || !data) { showToast('Could not start setup. Try again.', true); return; }
+  if (data.error) { showToast(data.error, true); return; }
+  if (data.url) window.location.href = data.url;
+}
+
+async function confirmDelivery(transactionId) {
+  showToast('Releasing payment...');
+  const { data, error } = await sb.functions.invoke('confirm-delivery-release-payout', { body: { transactionId } });
+  if (error || !data) { showToast('Could not release payment. Try again.', true); return; }
+  if (data.error) { showToast(data.error, true); return; }
+  showToast('Payment released to seller!');
+  loadRecord();
 }
 
 async function shareRecordCard() {
