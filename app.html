@@ -55,6 +55,7 @@
   .btn-primary:hover { box-shadow: 0 4px 16px rgba(255,61,46,0.4); }
   .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
   .btn-sm { padding: 0.55rem 0.9rem; font-size: 0.78rem; width: auto; }
+  .btn-danger { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
 
   .status-msg { font-size: 0.85rem; margin-top: 0.75rem; min-height: 1.2rem; }
   .status-msg.success { color: var(--win); }
@@ -66,8 +67,9 @@
   .topbar { position: sticky; top: 0; z-index: 20; height: var(--topbar-h); display: flex; align-items: center; justify-content: space-between; padding: 0 1.1rem; background: rgba(14,14,16,0.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); }
   .topbar-logo { font-family: 'Archivo Black', sans-serif; font-size: 1.1rem; }
   .topbar-logo span { color: var(--accent); }
-  .profile-avatar-btn { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #FF3D2E, #B8281C); border: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; transition: transform 0.12s ease; }
+  .profile-avatar-btn { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #FF3D2E, #B8281C); border: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; transition: transform 0.12s ease; overflow: hidden; }
   .profile-avatar-btn:active { transform: scale(0.9); }
+  .profile-avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
 
   .content { padding: 1rem 1.1rem; padding-bottom: calc(var(--tabbar-h) + 4.5rem); min-height: calc(100vh - var(--topbar-h)); }
 
@@ -101,7 +103,7 @@
   .gallery { position: relative; height: 200px; background: linear-gradient(135deg, #24242a, #17171b); overflow: hidden; }
   .gallery-track { display: flex; height: 100%; transition: transform 0.3s ease; touch-action: pan-y; }
   .gallery-frame { flex: 0 0 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--text-dim); }
-  .gallery-frame img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+  .gallery-frame img, .gallery-frame video { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
   .gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; border-radius: 50%; background: rgba(14,14,16,0.65); color: #fff; border: none; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 3; }
   .gallery-arrow.prev { left: 0.6rem; }
   .gallery-arrow.next { right: 0.6rem; }
@@ -147,7 +149,8 @@
   .lb-rank.gold { color: var(--gold); text-shadow: 0 0 12px rgba(255,201,74,0.6); }
   .lb-rank.silver { color: var(--silver); }
   .lb-rank.bronze { color: var(--bronze); }
-  .lb-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #FF3D2E, #B8281C); flex-shrink: 0; }
+  .lb-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #FF3D2E, #B8281C); flex-shrink: 0; overflow: hidden; }
+  .lb-avatar img { width: 100%; height: 100%; object-fit: cover; }
   .lb-info { flex: 1; min-width: 0; }
   .lb-name { font-weight: 700; font-size: 0.85rem; }
   .lb-tier { font-size: 0.65rem; color: var(--accent); font-weight: 600; text-transform: uppercase; }
@@ -156,7 +159,9 @@
   .lb-score-label { font-size: 0.6rem; color: var(--text-dim); }
 
   .profile-head { text-align: center; padding: 1rem 0 1.2rem; animation: popIn 0.4s ease; }
-  .avatar { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #FF3D2E, #B8281C); margin: 0 auto 0.6rem; }
+  .avatar { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #FF3D2E, #B8281C); margin: 0 auto 0.6rem; cursor: pointer; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; font-family: 'Archivo Black', sans-serif; font-size: 1.6rem; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar-edit-hint { font-size: 0.65rem; color: var(--text-dim); margin-top: -0.3rem; margin-bottom: 0.6rem; }
   .profile-name { font-weight: 700; font-size: 1.05rem; }
   .profile-rank { font-size: 0.78rem; color: var(--accent); font-weight: 700; margin-top: 0.15rem; }
   .stat-row { display: flex; justify-content: space-around; padding: 1rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
@@ -170,12 +175,15 @@
   .share-btn { margin-top: 1.5rem; }
   .logout-btn { margin-top: 0.75rem; }
 
-  .order-row { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; margin-bottom: 0.5rem; }
+  .order-row, .listing-row { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; margin-bottom: 0.5rem; }
   .order-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.2rem; }
   .order-meta { font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.5rem; }
   .order-tag { display: inline-block; font-size: 0.62rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 10px; text-transform: uppercase; }
   .order-tag.held { background: rgba(255,201,74,0.15); color: var(--gold); }
   .order-tag.released { background: rgba(74,222,128,0.15); color: var(--win); }
+  .order-tag.active { background: rgba(255,61,46,0.15); color: var(--accent); }
+  .listing-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+  .listing-actions button { flex: 1; padding: 0.5rem; font-size: 0.72rem; }
   .payout-banner { background: rgba(255,201,74,0.08); border: 1px solid var(--gold); border-radius: 10px; padding: 0.8rem; margin-bottom: 1rem; font-size: 0.8rem; }
   .payout-banner button { margin-top: 0.6rem; }
 
@@ -232,6 +240,7 @@
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal" id="modal-content"></div>
 </div>
+<input type="file" id="avatar-file-input" accept="image/*" style="display:none;" />
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -244,6 +253,7 @@ let activeTab = 'feed';
 let myVotedChallengeIds = new Set();
 let currentProfile = null;
 let currentFinished = [];
+let myAvatarUrl = null;
 
 const app = document.getElementById('app');
 const modalOverlay = document.getElementById('modal-overlay');
@@ -277,12 +287,15 @@ function showVsIntro(leftTitle, leftImg, rightTitle, rightImg, element, onDone) 
 }
 
 function galleryHtml(mediaArr) {
-  const imgs = (mediaArr || []).slice().sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
-  if (!imgs.length) return `<div class="gallery"><div class="gallery-frame">Photo</div></div>`;
-  const frames = imgs.map(m => `<div class="gallery-frame"><img src="${m.url}" loading="lazy" /></div>`).join('');
-  const dots = imgs.length > 1 ? `<div class="gallery-dots">${imgs.map((_,i) => `<div class="gallery-dot ${i===0?'active':''}"></div>`).join('')}</div>` : '';
-  const arrows = imgs.length > 1 ? `<button class="gallery-arrow prev">‹</button><button class="gallery-arrow next">›</button>` : '';
-  return `<div class="gallery" data-count="${imgs.length}" data-index="0"><div class="gallery-track">${frames}</div>${arrows}${dots}</div>`;
+  const items = (mediaArr || []).slice().sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
+  if (!items.length) return `<div class="gallery"><div class="gallery-frame">Photo</div></div>`;
+  const frames = items.map(m => m.type === 'video'
+    ? `<div class="gallery-frame"><video src="${m.url}" muted playsinline loop controls></video></div>`
+    : `<div class="gallery-frame"><img src="${m.url}" loading="lazy" /></div>`
+  ).join('');
+  const dots = items.length > 1 ? `<div class="gallery-dots">${items.map((_,i) => `<div class="gallery-dot ${i===0?'active':''}"></div>`).join('')}</div>` : '';
+  const arrows = items.length > 1 ? `<button class="gallery-arrow prev">‹</button><button class="gallery-arrow next">›</button>` : '';
+  return `<div class="gallery" data-count="${items.length}" data-index="0"><div class="gallery-track">${frames}</div>${arrows}${dots}</div>`;
 }
 
 function wireGalleries(root) {
@@ -313,6 +326,10 @@ function wireGalleries(root) {
 async function initAuth() {
   const { data } = await sb.auth.getSession();
   session = data.session;
+  if (session) {
+    const { data: p } = await sb.from('profiles').select('avatar_url').eq('id', session.user.id).single();
+    myAvatarUrl = p?.avatar_url || null;
+  }
   sb.auth.onAuthStateChange((_event, newSession) => { session = newSession; render(); });
   render();
 }
@@ -379,7 +396,7 @@ function renderApp() {
   app.innerHTML = `
     <div class="topbar">
       <div class="topbar-logo">Stand<span>Off</span></div>
-      <button class="profile-avatar-btn" id="profile-btn" title="Your profile">${initial}</button>
+      <button class="profile-avatar-btn" id="profile-btn" title="Your profile">${myAvatarUrl ? `<img src="${myAvatarUrl}" />` : initial}</button>
     </div>
     <div class="content" id="content"></div>
     ${activeTab === 'feed' ? '<button class="fab" id="fab-post">+</button>' : ''}
@@ -398,7 +415,7 @@ function renderApp() {
     btn.addEventListener('click', () => { activeTab = btn.dataset.tab; renderApp(); });
   });
   const fab = document.getElementById('fab-post');
-  if (fab) fab.addEventListener('click', openNewPostModal);
+  if (fab) fab.addEventListener('click', () => openPostModal(null));
 
   if (activeTab === 'feed') loadFeed();
   if (activeTab === 'arena') loadArena();
@@ -414,7 +431,7 @@ async function loadFeed() {
   content.innerHTML = loadingHtml();
   const { data: posts, error } = await sb
     .from('posts')
-    .select('id, title, description, user_id, category, is_sample, for_sale, price_cents, sponsor_tagline, profiles(username, is_brand), media(url, sort_order)')
+    .select('id, title, description, user_id, category, is_sample, for_sale, price_cents, sponsor_tagline, profiles(username, is_brand), media(url, type, sort_order)')
     .order('created_at', { ascending: false })
     .limit(20);
   if (error) { content.innerHTML = `<div class="empty-state">Couldn't load the feed. ${error.message}</div>`; return; }
@@ -439,10 +456,11 @@ async function loadFeed() {
   content.querySelectorAll('.chip-buy').forEach(btn => btn.addEventListener('click', () => buyNow(btn.dataset.postId)));
 }
 
-function openNewPostModal() {
+function openPostModal(existingPost) {
+  const isEdit = !!existingPost;
   modalContent.innerHTML = `
     <button class="modal-close" id="modal-close">✕</button>
-    <div class="modal-title">Post something</div>
+    <div class="modal-title">${isEdit ? 'Edit listing' : 'Post something'}</div>
     <select id="new-category">
       <option value="Cars">Cars</option>
       <option value="Homes">Homes</option>
@@ -450,21 +468,22 @@ function openNewPostModal() {
       <option value="Timepieces">Timepieces</option>
       <option value="Custom Gear">Custom Gear</option>
     </select>
-    <input type="text" id="new-title" placeholder="Title (e.g. '69 Camaro SS)" />
-    <textarea id="new-desc" rows="3" placeholder="Description"></textarea>
-    <input type="file" id="new-photos" accept="image/*" multiple />
+    <input type="text" id="new-title" placeholder="Title (e.g. '69 Camaro SS)" value="${isEdit ? escapeHtml(existingPost.title) : ''}" />
+    <textarea id="new-desc" rows="3" placeholder="Description">${isEdit ? escapeHtml(existingPost.description || '') : ''}</textarea>
+    <input type="file" id="new-photos" accept="image/*,video/*" multiple />
     <div class="sell-type-row">
-      <button type="button" class="sell-type-btn active" data-sell="none">Not for sale</button>
-      <button type="button" class="sell-type-btn" data-sell="buy">Buy Now</button>
-      <button type="button" class="sell-type-btn" data-sell="auction">Auction</button>
+      <button type="button" class="sell-type-btn ${!isEdit || !existingPost.for_sale ? 'active' : ''}" data-sell="none">Not for sale</button>
+      <button type="button" class="sell-type-btn ${isEdit && existingPost.for_sale ? 'active' : ''}" data-sell="buy">Buy Now</button>
+      ${isEdit ? '' : '<button type="button" class="sell-type-btn" data-sell="auction">Auction</button>'}
     </div>
-    <input type="number" id="new-price" placeholder="Price in USD" style="display:none;" />
+    <input type="number" id="new-price" placeholder="Price in USD" value="${isEdit && existingPost.price_cents ? (existingPost.price_cents/100) : ''}" style="display:${isEdit && existingPost.for_sale ? 'block' : 'none'};" />
     <input type="number" id="auction-duration" placeholder="Auction length in hours (e.g. 48)" style="display:none;" />
-    <button class="btn btn-primary" id="new-submit">Post it</button>
+    <button class="btn btn-primary" id="new-submit">${isEdit ? 'Save changes' : 'Post it'}</button>
     <div class="status-msg" id="new-msg"></div>
   `;
   modalOverlay.classList.add('open');
-  let sellType = 'none';
+  let sellType = isEdit && existingPost.for_sale ? 'buy' : 'none';
+  if (isEdit) document.getElementById('new-category').value = existingPost.category;
   document.getElementById('modal-close').addEventListener('click', closeModal);
   document.querySelectorAll('.sell-type-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -473,7 +492,8 @@ function openNewPostModal() {
       sellType = btn.dataset.sell;
       document.getElementById('new-price').style.display = (sellType === 'buy' || sellType === 'auction') ? 'block' : 'none';
       document.getElementById('new-price').placeholder = sellType === 'auction' ? 'Starting price in USD' : 'Price in USD';
-      document.getElementById('auction-duration').style.display = sellType === 'auction' ? 'block' : 'none';
+      const durInput = document.getElementById('auction-duration');
+      if (durInput) durInput.style.display = sellType === 'auction' ? 'block' : 'none';
     });
   });
   document.getElementById('new-submit').addEventListener('click', async () => {
@@ -481,7 +501,8 @@ function openNewPostModal() {
     const description = document.getElementById('new-desc').value.trim();
     const category = document.getElementById('new-category').value;
     const priceVal = document.getElementById('new-price').value;
-    const durationVal = document.getElementById('auction-duration').value;
+    const durationInput = document.getElementById('auction-duration');
+    const durationVal = durationInput ? durationInput.value : '';
     const files = Array.from(document.getElementById('new-photos').files || []);
     const msg = document.getElementById('new-msg');
     const submitBtn = document.getElementById('new-submit');
@@ -490,42 +511,50 @@ function openNewPostModal() {
       msg.textContent = 'Enter a valid price.'; msg.className = 'status-msg error'; return;
     }
 
-    submitBtn.disabled = true; submitBtn.textContent = 'Posting...';
-    const insertPayload = { user_id: session.user.id, title, description, category };
-    if (sellType === 'buy') { insertPayload.for_sale = true; insertPayload.price_cents = Math.round(Number(priceVal) * 100); }
+    submitBtn.disabled = true; submitBtn.textContent = isEdit ? 'Saving...' : 'Posting...';
+    let postId = existingPost?.id;
 
-    const { data: newPost, error } = await sb.from('posts').insert(insertPayload).select('id').single();
-    if (error) { msg.textContent = error.message; msg.className = 'status-msg error'; submitBtn.disabled = false; submitBtn.textContent = 'Post it'; return; }
+    if (isEdit) {
+      const updatePayload = { title, description, category };
+      updatePayload.for_sale = sellType === 'buy';
+      updatePayload.price_cents = sellType === 'buy' ? Math.round(Number(priceVal) * 100) : null;
+      const { error } = await sb.from('posts').update(updatePayload).eq('id', postId);
+      if (error) { msg.textContent = error.message; msg.className = 'status-msg error'; submitBtn.disabled = false; submitBtn.textContent = 'Save changes'; return; }
+    } else {
+      const insertPayload = { user_id: session.user.id, title, description, category };
+      if (sellType === 'buy') { insertPayload.for_sale = true; insertPayload.price_cents = Math.round(Number(priceVal) * 100); }
+      const { data: newPost, error } = await sb.from('posts').insert(insertPayload).select('id').single();
+      if (error) { msg.textContent = error.message; msg.className = 'status-msg error'; submitBtn.disabled = false; submitBtn.textContent = 'Post it'; return; }
+      postId = newPost.id;
+    }
 
     if (files.length) {
-      submitBtn.textContent = 'Uploading photos...';
+      submitBtn.textContent = 'Uploading media...';
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const path = `${session.user.id}/${newPost.id}/${i}-${file.name}`;
+        const isVideo = file.type.startsWith('video');
+        const path = `${session.user.id}/${postId}/${Date.now()}-${i}-${file.name}`;
         const { error: upErr } = await sb.storage.from('post-media').upload(path, file);
-        if (upErr) { showToast('One photo failed to upload: ' + upErr.message, true); continue; }
+        if (upErr) { showToast('One file failed to upload: ' + upErr.message, true); continue; }
         const { data: pub } = sb.storage.from('post-media').getPublicUrl(path);
-        await sb.from('media').insert({ post_id: newPost.id, url: pub.publicUrl, type: 'image', sort_order: i });
+        await sb.from('media').insert({ post_id: postId, url: pub.publicUrl, type: isVideo ? 'video' : 'image', sort_order: i });
       }
     }
 
-    if (sellType === 'auction') {
+    if (!isEdit && sellType === 'auction') {
       const hours = Number(durationVal) > 0 ? Number(durationVal) : 48;
       const { error: aErr } = await sb.from('auctions').insert({
-        post_id: newPost.id,
+        post_id: postId,
         seller_id: session.user.id,
         starting_price_cents: Math.round(Number(priceVal) * 100),
         ends_at: new Date(Date.now() + hours * 3600 * 1000).toISOString()
       });
-      if (aErr) {
-        showToast('Posted, but auction could not start: ' + aErr.message, true);
-        closeModal(); loadFeed(); return;
-      }
+      if (aErr) showToast('Posted, but auction could not start: ' + aErr.message, true);
     }
 
     closeModal();
-    showToast('Posted! Someone can call you out now.');
-    loadFeed();
+    showToast(isEdit ? 'Listing updated!' : 'Posted! Someone can call you out now.');
+    if (activeTab === 'record') loadRecord(); else loadFeed();
   });
 }
 
@@ -599,20 +628,13 @@ async function castVote(challengeId, option) {
 async function loadMarket() {
   const content = document.getElementById('content');
   content.innerHTML = loadingHtml();
-
-  const { data: listings } = await sb
-    .from('posts')
-    .select('id, title, price_cents, media(url), profiles(username)')
-    .eq('for_sale', true);
-
+  const { data: listings } = await sb.from('posts').select('id, title, price_cents, media(url), profiles(username)').eq('for_sale', true);
   const { data: auctions, error } = await sb
     .from('auctions')
     .select('id, starting_price_cents, current_bid_cents, min_increment_cents, ends_at, status, seller_id, posts(title, media(url)), seller:profiles!seller_id(username)')
     .eq('status', 'Active')
     .order('ends_at', { ascending: true });
-
   if (error) { content.innerHTML = `<div class="empty-state">Couldn't load the market. ${error.message}</div>`; return; }
-
   const listingsHtml = (listings || []).map(p => `
     <div class="market-card fade-item">
       <div class="post-media" style="margin:-0.9rem -0.9rem 0.7rem; height:180px; background:linear-gradient(135deg,#24242a,#17171b); border-radius:12px 12px 0 0; overflow:hidden; display:flex; align-items:center; justify-content:center; color:var(--text-dim); font-size:0.75rem;">${p.media && p.media[0] ? `<img src="${p.media[0].url}" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />` : 'Photo'}</div>
@@ -622,7 +644,6 @@ async function loadMarket() {
       <button class="btn btn-primary chip-buy-full" data-post-id="${p.id}">Buy Now</button>
     </div>
   `).join('');
-
   const auctionsHtml = (auctions || []).map(a => {
     const timer = formatTimeLeft(a.ends_at);
     const current = a.current_bid_cents || a.starting_price_cents;
@@ -633,21 +654,16 @@ async function loadMarket() {
         <div class="post-title">${escapeHtml(a.posts?.title || 'Item')}</div>
         <div class="post-user">@${a.seller?.username || 'unknown'} · <span class="auction-timer ${timer.urgent ? 'urgent' : ''}">⏱ ${timer.text}</span></div>
         <div class="market-price">$${(current/100).toFixed(0)} <span style="font-size:0.7rem;color:var(--text-dim);font-weight:600;">current bid</span></div>
-        <div class="market-bid-row">
-          <input type="number" placeholder="$${minNext.toFixed(0)}+" id="bid-${a.id}" />
-          <button class="btn btn-primary btn-sm" data-auction-id="${a.id}">Bid</button>
-        </div>
+        <div class="market-bid-row"><input type="number" placeholder="$${minNext.toFixed(0)}+" id="bid-${a.id}" /><button class="btn btn-primary btn-sm" data-auction-id="${a.id}">Bid</button></div>
       </div>
     `;
   }).join('');
-
   content.innerHTML = `
     <div class="section-header"><div class="section-title">Buy Now</div><div class="section-sub">${(listings||[]).length} listed</div></div>
     ${listingsHtml || '<div class="empty-state">Nothing listed yet.</div>'}
     <div class="section-header" style="margin-top:1.4rem;"><div class="section-title">Timed Auctions</div><div class="section-sub">Belt holders & Elite+</div></div>
     ${auctionsHtml || '<div class="empty-state">No live auctions right now.</div>'}
   `;
-
   content.querySelectorAll('.chip-buy-full').forEach(btn => btn.addEventListener('click', () => buyNow(btn.dataset.postId)));
   content.querySelectorAll('[data-auction-id]').forEach(btn => {
     btn.addEventListener('click', async () => {
@@ -670,12 +686,7 @@ async function loadLeaderboard() {
     .from('belts')
     .select('category, defense_count, is_sample, current_holder_post_id, current_holder_user_id, holder:profiles!current_holder_user_id(username), item:posts!current_holder_post_id(title, media(url))')
     .order('category', { ascending: true });
-  const { data: profiles, error } = await sb
-    .from('profiles')
-    .select('id, username, score, trophies, rank')
-    .eq('is_brand', false)
-    .order('score', { ascending: false })
-    .limit(50);
+  const { data: profiles, error } = await sb.from('profiles').select('id, username, score, trophies, rank, avatar_url').eq('is_brand', false).order('score', { ascending: false }).limit(50);
   if (error) { content.innerHTML = `<div class="empty-state">Couldn't load the leaderboard. ${error.message}</div>`; return; }
   const beltIcons = { 'Cars': '🏎️', 'Homes': '🏡', 'Motorcycles': '🏍️', 'Timepieces': '⏱️', 'Custom Gear': '🔥' };
   const beltsHtml = (belts || []).map((b, i) => {
@@ -701,7 +712,7 @@ async function loadLeaderboard() {
     return `
       <div class="lb-row fade-item ${isMe ? 'me' : ''}" style="animation-delay:${i * 0.03}s">
         <div class="lb-rank ${medalClass}">${pos}</div>
-        <div class="lb-avatar"></div>
+        <div class="lb-avatar">${p.avatar_url ? `<img src="${p.avatar_url}" />` : ''}</div>
         <div class="lb-info"><div class="lb-name">@${escapeHtml(p.username)}${isMe ? ' (you)' : ''}</div><div class="lb-tier">${p.rank}</div></div>
         <div class="lb-score"><div class="lb-score-num">${p.score}</div><div class="lb-score-label">${p.trophies} 🏆</div></div>
       </div>
@@ -716,15 +727,29 @@ async function loadLeaderboard() {
   content.querySelectorAll('.belt-challenge-btn').forEach(btn => btn.addEventListener('click', () => openChallengeModal(btn.dataset.postId, btn.dataset.ownerId)));
 }
 
+async function uploadAvatar(file) {
+  showToast('Uploading photo...');
+  const path = `${session.user.id}/avatar-${Date.now()}.${(file.name.split('.').pop() || 'jpg')}`;
+  const { error: upErr } = await sb.storage.from('avatars').upload(path, file);
+  if (upErr) { showToast('Upload failed: ' + upErr.message, true); return; }
+  const { data: pub } = sb.storage.from('avatars').getPublicUrl(path);
+  const { error } = await sb.from('profiles').update({ avatar_url: pub.publicUrl }).eq('id', session.user.id);
+  if (error) { showToast('Could not save photo.', true); return; }
+  myAvatarUrl = pub.publicUrl;
+  showToast('Profile photo updated!');
+  loadRecord();
+}
+
 async function loadRecord() {
   const content = document.getElementById('content');
   content.innerHTML = loadingHtml();
   const { data: profile, error: profileErr } = await sb
     .from('profiles')
-    .select('username, score, trophies, rank, stripe_connect_account_id, stripe_payouts_enabled')
+    .select('username, score, trophies, rank, avatar_url, stripe_connect_account_id, stripe_payouts_enabled')
     .eq('id', session.user.id)
     .single();
   if (profileErr) { content.innerHTML = `<div class="empty-state">Couldn't load your profile. ${profileErr.message}</div>`; return; }
+  myAvatarUrl = profile.avatar_url || null;
   const { data: finished } = await sb
     .from('challenges')
     .select('id, element, status, winner_id, challenger_id, opponent_id, postA:post_a_id(title), postB:post_b_id(title)')
@@ -735,19 +760,14 @@ async function loadRecord() {
   currentProfile = profile;
   currentFinished = finished || [];
 
-  const { data: myPurchases } = await sb
-    .from('transactions')
-    .select('id, amount_cents, status, posts(title)')
-    .eq('buyer_id', session.user.id)
-    .in('status', ['held', 'released'])
+  const { data: myListings } = await sb
+    .from('posts')
+    .select('id, title, for_sale, price_cents, media(url), auctions(id, status, current_bid_cents, starting_price_cents, ends_at)')
+    .eq('user_id', session.user.id)
     .order('created_at', { ascending: false });
 
-  const { data: mySales } = await sb
-    .from('transactions')
-    .select('id, amount_cents, platform_fee_cents, status, posts(title)')
-    .eq('seller_id', session.user.id)
-    .in('status', ['held', 'released'])
-    .order('created_at', { ascending: false });
+  const { data: myPurchases } = await sb.from('transactions').select('id, amount_cents, status, posts(title)').eq('buyer_id', session.user.id).in('status', ['held', 'released']).order('created_at', { ascending: false });
+  const { data: mySales } = await sb.from('transactions').select('id, amount_cents, platform_fee_cents, status, posts(title)').eq('seller_id', session.user.id).in('status', ['held', 'released']).order('created_at', { ascending: false });
 
   const rows = currentFinished.map(c => {
     const won = c.winner_id === session.user.id;
@@ -756,14 +776,34 @@ async function loadRecord() {
   }).join('');
 
   const payoutsReady = profile.stripe_connect_account_id && profile.stripe_payouts_enabled;
-  const payoutBanner = payoutsReady ? '' : `
-    <div class="payout-banner">
-      💳 Set up payouts before you list anything for sale or your buyers can't check out.
-      <button class="btn btn-ghost btn-sm" id="setup-payouts-btn">Set Up Payouts</button>
-    </div>
-  `;
+  const payoutBanner = payoutsReady ? '' : `<div class="payout-banner">💳 Set up payouts before you list anything for sale or your buyers can't check out.<button class="btn btn-ghost btn-sm" id="setup-payouts-btn">Set Up Payouts</button></div>`;
 
-  const purchasesHtml = (myPurchases || []).length ? (myPurchases || []).map(t => `
+  const listingsHtml = (myListings || []).length ? myListings.map(p => {
+    const auction = p.auctions && p.auctions[0];
+    let statusHtml = '';
+    if (auction) {
+      const t = formatTimeLeft(auction.ends_at);
+      statusHtml = `<span class="order-tag active">${auction.status === 'Active' ? 'Auction · ' + t.text : auction.status}</span>`;
+    } else if (p.for_sale) {
+      statusHtml = `<span class="order-tag active">Buy Now · $${((p.price_cents||0)/100).toFixed(0)}</span>`;
+    } else {
+      statusHtml = `<span class="order-tag">Not for sale</span>`;
+    }
+    const canCancelAuction = auction && auction.status === 'Active' && !auction.current_bid_cents;
+    return `
+      <div class="listing-row">
+        <div class="order-title">${escapeHtml(p.title)}</div>
+        <div class="order-meta">${statusHtml}</div>
+        <div class="listing-actions">
+          ${auction ? '' : `<button class="btn btn-ghost btn-sm" data-edit-id="${p.id}">Edit</button>`}
+          ${canCancelAuction ? `<button class="btn btn-ghost btn-sm" data-cancel-auction="${auction.id}">Cancel Auction</button>` : ''}
+          <button class="btn btn-danger btn-sm" data-delete-id="${p.id}">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join('') : '';
+
+  const purchasesHtml = (myPurchases || []).length ? myPurchases.map(t => `
     <div class="order-row">
       <div class="order-title">${escapeHtml(t.posts?.title || 'Item')}</div>
       <div class="order-meta">$${(t.amount_cents/100).toFixed(0)} · <span class="order-tag ${t.status}">${t.status === 'held' ? 'In escrow' : 'Released'}</span></div>
@@ -771,7 +811,7 @@ async function loadRecord() {
     </div>
   `).join('') : '';
 
-  const salesHtml = (mySales || []).length ? (mySales || []).map(t => `
+  const salesHtml = (mySales || []).length ? mySales.map(t => `
     <div class="order-row">
       <div class="order-title">${escapeHtml(t.posts?.title || 'Item')}</div>
       <div class="order-meta">You'll receive $${((t.amount_cents - (t.platform_fee_cents||0))/100).toFixed(0)} · <span class="order-tag ${t.status}">${t.status === 'held' ? 'Awaiting buyer confirmation' : 'Paid out'}</span></div>
@@ -779,14 +819,21 @@ async function loadRecord() {
   `).join('') : '';
 
   content.innerHTML = `
-    <div class="profile-head"><div class="avatar"></div><div class="profile-name">@${escapeHtml(profile.username)}</div><div class="profile-rank">${profile.rank.toUpperCase()}</div></div>
+    <div class="profile-head">
+      <div class="avatar" id="avatar-click">${profile.avatar_url ? `<img src="${profile.avatar_url}" />` : (profile.username||'?').charAt(0).toUpperCase()}</div>
+      <div class="avatar-edit-hint">Tap to change photo</div>
+      <div class="profile-name">@${escapeHtml(profile.username)}</div>
+      <div class="profile-rank">${profile.rank.toUpperCase()}</div>
+    </div>
     <div class="stat-row">
       <div class="stat"><div class="stat-num">${profile.score}</div><div class="stat-label">SCORE</div></div>
       <div class="stat"><div class="stat-num">${profile.trophies}</div><div class="stat-label">TROPHIES</div></div>
       <div class="stat"><div class="stat-num">${currentFinished.length}</div><div class="stat-label">SETTLED</div></div>
     </div>
     ${payoutBanner}
-    ${purchasesHtml ? `<div class="section-header"><div class="section-title">My Orders</div></div>${purchasesHtml}` : ''}
+    <div class="section-header"><div class="section-title">My Listings</div></div>
+    ${listingsHtml || '<div class="empty-state">No listings yet. Post something from the Feed.</div>'}
+    ${purchasesHtml ? `<div class="section-header" style="margin-top:1rem;"><div class="section-title">My Orders</div></div>${purchasesHtml}` : ''}
     ${salesHtml ? `<div class="section-header" style="margin-top:1rem;"><div class="section-title">My Sales</div></div>${salesHtml}` : ''}
     <div class="section-header" style="margin-top:1rem;"><div class="section-title">Standoffs</div></div>
     ${rows || `<div class="empty-state">No settled challenges yet.</div>`}
@@ -795,11 +842,40 @@ async function loadRecord() {
   `;
   document.getElementById('record-logout').addEventListener('click', logout);
   document.getElementById('share-record-btn').addEventListener('click', shareRecordCard);
+  document.getElementById('avatar-click').addEventListener('click', () => document.getElementById('avatar-file-input').click());
   const payoutsBtn = document.getElementById('setup-payouts-btn');
   if (payoutsBtn) payoutsBtn.addEventListener('click', setupPayouts);
-  content.querySelectorAll('[data-confirm-id]').forEach(btn => {
-    btn.addEventListener('click', () => confirmDelivery(btn.dataset.confirmId));
+  content.querySelectorAll('[data-confirm-id]').forEach(btn => btn.addEventListener('click', () => confirmDelivery(btn.dataset.confirmId)));
+  content.querySelectorAll('[data-delete-id]').forEach(btn => btn.addEventListener('click', () => deleteListing(btn.dataset.deleteId)));
+  content.querySelectorAll('[data-cancel-auction]').forEach(btn => btn.addEventListener('click', () => cancelAuction(btn.dataset.cancelAuction)));
+  content.querySelectorAll('[data-edit-id]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const { data: post } = await sb.from('posts').select('id, title, description, category, for_sale, price_cents').eq('id', btn.dataset.editId).single();
+      if (post) openPostModal(post);
+    });
   });
+}
+
+document.getElementById('avatar-file-input').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) uploadAvatar(file);
+  e.target.value = '';
+});
+
+async function deleteListing(postId) {
+  if (!confirm('Delete this listing? This cannot be undone.')) return;
+  const { error } = await sb.from('posts').delete().eq('id', postId);
+  if (error) { showToast('Could not delete: ' + error.message, true); return; }
+  showToast('Listing deleted.');
+  loadRecord();
+}
+
+async function cancelAuction(auctionId) {
+  if (!confirm('Cancel this auction?')) return;
+  const { error } = await sb.from('auctions').update({ status: 'Cancelled' }).eq('id', auctionId);
+  if (error) { showToast('Could not cancel: ' + error.message, true); return; }
+  showToast('Auction cancelled.');
+  loadRecord();
 }
 
 async function setupPayouts() {
