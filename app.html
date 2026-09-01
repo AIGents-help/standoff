@@ -8,23 +8,11 @@
   @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap');
 
   :root {
-    --bg: #0E0E10;
-    --panel: #16161A;
-    --panel-2: #1C1C20;
-    --text: #F2F1ED;
-    --text-dim: #8A8A90;
-    --accent: #FF3D2E;
-    --border: #26262B;
-    --win: #4ADE80;
-    --gold: #FFC94A;
-    --silver: #C7CDD6;
-    --bronze: #D98A5B;
-    --tabbar-h: 64px;
-    --topbar-h: 58px;
+    --bg: #0E0E10; --panel: #16161A; --panel-2: #1C1C20; --text: #F2F1ED; --text-dim: #8A8A90;
+    --accent: #FF3D2E; --border: #26262B; --win: #4ADE80; --gold: #FFC94A; --silver: #C7CDD6; --bronze: #D98A5B;
+    --tabbar-h: 64px; --topbar-h: 58px;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html, body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
   body { min-height: 100vh; }
 
@@ -58,6 +46,7 @@
     outline: none; margin-bottom: 0.75rem; transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
   input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,61,46,0.15); }
+  input[type="file"] { border: 1px dashed var(--border); padding: 0.7rem; font-size: 0.82rem; color: var(--text-dim); }
 
   .btn { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.95rem; padding: 0.85rem 1.25rem; border-radius: 8px; border: none; cursor: pointer; width: 100%; transition: opacity 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease; }
   .btn:active { transform: scale(0.96); }
@@ -77,8 +66,8 @@
   .topbar { position: sticky; top: 0; z-index: 20; height: var(--topbar-h); display: flex; align-items: center; justify-content: space-between; padding: 0 1.1rem; background: rgba(14,14,16,0.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); }
   .topbar-logo { font-family: 'Archivo Black', sans-serif; font-size: 1.1rem; }
   .topbar-logo span { color: var(--accent); }
-  .icon-btn { background: var(--panel); border: 1px solid var(--border); color: var(--text-dim); border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9rem; transition: transform 0.12s ease; }
-  .icon-btn:active { transform: scale(0.9); }
+  .profile-avatar-btn { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #FF3D2E, #B8281C); border: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; transition: transform 0.12s ease; }
+  .profile-avatar-btn:active { transform: scale(0.9); }
 
   .content { padding: 1rem 1.1rem; padding-bottom: calc(var(--tabbar-h) + 4.5rem); min-height: calc(100vh - var(--topbar-h)); }
 
@@ -108,8 +97,18 @@
 
   .post-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 0.9rem; position: relative; transition: transform 0.15s ease, border-color 0.15s ease; }
   .post-card:hover { border-color: #3a3a40; transform: translateY(-1px); }
-  .post-media { height: 160px; background: linear-gradient(135deg, #24242a, #17171b); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--text-dim); overflow: hidden; }
-  .post-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .gallery { position: relative; height: 200px; background: linear-gradient(135deg, #24242a, #17171b); overflow: hidden; }
+  .gallery-track { display: flex; height: 100%; transition: transform 0.3s ease; touch-action: pan-y; }
+  .gallery-frame { flex: 0 0 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--text-dim); }
+  .gallery-frame img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+  .gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; border-radius: 50%; background: rgba(14,14,16,0.65); color: #fff; border: none; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 3; }
+  .gallery-arrow.prev { left: 0.6rem; }
+  .gallery-arrow.next { right: 0.6rem; }
+  .gallery-dots { position: absolute; bottom: 0.6rem; left: 0; right: 0; display: flex; justify-content: center; gap: 0.35rem; z-index: 3; }
+  .gallery-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.35); transition: background 0.15s ease, transform 0.15s ease; }
+  .gallery-dot.active { background: #fff; transform: scale(1.3); }
+
   .post-body { padding: 0.8rem 0.95rem 0.95rem; }
   .post-user { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.2rem; }
   .post-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.3rem; }
@@ -119,8 +118,8 @@
   .chip-callout { background: var(--accent); color: #fff; }
   .chip-buy { background: var(--win); color: #0E0E10; font-weight: 700; }
 
-  .sample-badge { position: absolute; top: 0.7rem; right: 0.7rem; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.25rem 0.5rem; border-radius: 5px; background: rgba(14,14,16,0.85); border: 1px solid var(--text-dim); color: var(--text-dim); z-index: 2; }
-  .sponsor-badge { position: absolute; top: 0.7rem; right: 0.7rem; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.25rem 0.5rem; border-radius: 5px; background: rgba(255,201,74,0.15); border: 1px solid var(--gold); color: var(--gold); z-index: 2; }
+  .sample-badge { position: absolute; top: 0.7rem; right: 0.7rem; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.25rem 0.5rem; border-radius: 5px; background: rgba(14,14,16,0.85); border: 1px solid var(--text-dim); color: var(--text-dim); z-index: 4; }
+  .sponsor-badge { position: absolute; top: 0.7rem; right: 0.7rem; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.25rem 0.5rem; border-radius: 5px; background: rgba(255,201,74,0.15); border: 1px solid var(--gold); color: var(--gold); z-index: 4; }
 
   .arena-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 0.9rem; margin-bottom: 0.9rem; position: relative; transition: transform 0.15s ease; }
   .arena-card:hover { transform: translateY(-1px); }
@@ -277,6 +276,40 @@ function showVsIntro(leftTitle, leftImg, rightTitle, rightImg, element, onDone) 
   }, 2500);
 }
 
+function galleryHtml(mediaArr) {
+  const imgs = (mediaArr || []).slice().sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
+  if (!imgs.length) return `<div class="gallery"><div class="gallery-frame">Photo</div></div>`;
+  const frames = imgs.map(m => `<div class="gallery-frame"><img src="${m.url}" loading="lazy" /></div>`).join('');
+  const dots = imgs.length > 1 ? `<div class="gallery-dots">${imgs.map((_,i) => `<div class="gallery-dot ${i===0?'active':''}"></div>`).join('')}</div>` : '';
+  const arrows = imgs.length > 1 ? `<button class="gallery-arrow prev">‹</button><button class="gallery-arrow next">›</button>` : '';
+  return `<div class="gallery" data-count="${imgs.length}" data-index="0"><div class="gallery-track">${frames}</div>${arrows}${dots}</div>`;
+}
+
+function wireGalleries(root) {
+  root.querySelectorAll('.gallery').forEach(gal => {
+    const count = Number(gal.dataset.count || 1);
+    if (count <= 1) return;
+    const track = gal.querySelector('.gallery-track');
+    const dots = gal.querySelectorAll('.gallery-dot');
+    function goTo(i) {
+      const idx = Math.max(0, Math.min(count - 1, i));
+      gal.dataset.index = idx;
+      track.style.transform = `translateX(-${idx * 100}%)`;
+      dots.forEach((d, di) => d.classList.toggle('active', di === idx));
+    }
+    const prev = gal.querySelector('.gallery-arrow.prev');
+    const next = gal.querySelector('.gallery-arrow.next');
+    if (prev) prev.addEventListener('click', (e) => { e.stopPropagation(); goTo(Number(gal.dataset.index) - 1); });
+    if (next) next.addEventListener('click', (e) => { e.stopPropagation(); goTo(Number(gal.dataset.index) + 1); });
+    let startX = 0;
+    track.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) goTo(Number(gal.dataset.index) + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+  });
+}
+
 async function initAuth() {
   const { data } = await sb.auth.getSession();
   session = data.session;
@@ -342,10 +375,11 @@ const TAB_ICONS = { feed: '📸', arena: '⚔️', market: '🛍️', leaderboar
 const TAB_LABELS = { feed: 'Feed', arena: 'Arena', market: 'Market', leaderboard: 'Board', record: 'Record' };
 
 function renderApp() {
+  const initial = (session?.user?.email || '?').charAt(0).toUpperCase();
   app.innerHTML = `
     <div class="topbar">
       <div class="topbar-logo">Stand<span>Off</span></div>
-      <button class="icon-btn" id="logout-btn">⏻</button>
+      <button class="profile-avatar-btn" id="profile-btn" title="Your profile">${initial}</button>
     </div>
     <div class="content" id="content"></div>
     ${activeTab === 'feed' ? '<button class="fab" id="fab-post">+</button>' : ''}
@@ -359,7 +393,7 @@ function renderApp() {
       `).join('')}
     </div>
   `;
-  document.getElementById('logout-btn').addEventListener('click', logout);
+  document.getElementById('profile-btn').addEventListener('click', () => { activeTab = 'record'; renderApp(); });
   document.querySelectorAll('.tab').forEach(btn => {
     btn.addEventListener('click', () => { activeTab = btn.dataset.tab; renderApp(); });
   });
@@ -380,7 +414,7 @@ async function loadFeed() {
   content.innerHTML = loadingHtml();
   const { data: posts, error } = await sb
     .from('posts')
-    .select('id, title, description, user_id, category, is_sample, for_sale, price_cents, sponsor_tagline, profiles(username, is_brand), media(url)')
+    .select('id, title, description, user_id, category, is_sample, for_sale, price_cents, sponsor_tagline, profiles(username, is_brand), media(url, sort_order)')
     .order('created_at', { ascending: false })
     .limit(20);
   if (error) { content.innerHTML = `<div class="empty-state">Couldn't load the feed. ${error.message}</div>`; return; }
@@ -388,7 +422,7 @@ async function loadFeed() {
   content.innerHTML = posts.map((p, i) => `
     <div class="post-card fade-item" style="animation-delay:${i * 0.05}s">
       ${p.profiles?.is_brand ? '<div class="sponsor-badge">Sponsored</div>' : (p.is_sample ? '<div class="sample-badge">Sample</div>' : '')}
-      <div class="post-media">${p.media && p.media[0] ? `<img src="${p.media[0].url}" alt="${escapeHtml(p.title)}" loading="lazy" />` : (p.category || 'Photo')}</div>
+      ${galleryHtml(p.media)}
       <div class="post-body">
         <div class="post-user">@${p.profiles?.username || 'unknown'}${p.sponsor_tagline ? ' — ' + escapeHtml(p.sponsor_tagline) : ''}</div>
         <div class="post-title">${escapeHtml(p.title)}</div>
@@ -400,6 +434,7 @@ async function loadFeed() {
       </div>
     </div>
   `).join('');
+  wireGalleries(content);
   content.querySelectorAll('.chip-callout').forEach(btn => btn.addEventListener('click', () => openChallengeModal(btn.dataset.postId, btn.dataset.ownerId)));
   content.querySelectorAll('.chip-buy').forEach(btn => btn.addEventListener('click', () => buyNow(btn.dataset.postId)));
 }
@@ -417,6 +452,7 @@ function openNewPostModal() {
     </select>
     <input type="text" id="new-title" placeholder="Title (e.g. '69 Camaro SS)" />
     <textarea id="new-desc" rows="3" placeholder="Description"></textarea>
+    <input type="file" id="new-photos" accept="image/*" multiple />
     <div class="sell-type-row">
       <button type="button" class="sell-type-btn active" data-sell="none">Not for sale</button>
       <button type="button" class="sell-type-btn" data-sell="buy">Buy Now</button>
@@ -446,17 +482,32 @@ function openNewPostModal() {
     const category = document.getElementById('new-category').value;
     const priceVal = document.getElementById('new-price').value;
     const durationVal = document.getElementById('auction-duration').value;
+    const files = Array.from(document.getElementById('new-photos').files || []);
     const msg = document.getElementById('new-msg');
+    const submitBtn = document.getElementById('new-submit');
     if (!title) { msg.textContent = 'Title is required.'; msg.className = 'status-msg error'; return; }
     if ((sellType === 'buy' || sellType === 'auction') && (!priceVal || Number(priceVal) <= 0)) {
       msg.textContent = 'Enter a valid price.'; msg.className = 'status-msg error'; return;
     }
 
+    submitBtn.disabled = true; submitBtn.textContent = 'Posting...';
     const insertPayload = { user_id: session.user.id, title, description, category };
     if (sellType === 'buy') { insertPayload.for_sale = true; insertPayload.price_cents = Math.round(Number(priceVal) * 100); }
 
     const { data: newPost, error } = await sb.from('posts').insert(insertPayload).select('id').single();
-    if (error) { msg.textContent = error.message; msg.className = 'status-msg error'; return; }
+    if (error) { msg.textContent = error.message; msg.className = 'status-msg error'; submitBtn.disabled = false; submitBtn.textContent = 'Post it'; return; }
+
+    if (files.length) {
+      submitBtn.textContent = 'Uploading photos...';
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const path = `${session.user.id}/${newPost.id}/${i}-${file.name}`;
+        const { error: upErr } = await sb.storage.from('post-media').upload(path, file);
+        if (upErr) { showToast('One photo failed to upload: ' + upErr.message, true); continue; }
+        const { data: pub } = sb.storage.from('post-media').getPublicUrl(path);
+        await sb.from('media').insert({ post_id: newPost.id, url: pub.publicUrl, type: 'image', sort_order: i });
+      }
+    }
 
     if (sellType === 'auction') {
       const hours = Number(durationVal) > 0 ? Number(durationVal) : 48;
@@ -564,7 +615,7 @@ async function loadMarket() {
 
   const listingsHtml = (listings || []).map(p => `
     <div class="market-card fade-item">
-      <div class="post-media" style="margin:-0.9rem -0.9rem 0.7rem;">${p.media && p.media[0] ? `<img src="${p.media[0].url}" loading="lazy" />` : 'Photo'}</div>
+      <div class="post-media" style="margin:-0.9rem -0.9rem 0.7rem; height:180px; background:linear-gradient(135deg,#24242a,#17171b); border-radius:12px 12px 0 0; overflow:hidden; display:flex; align-items:center; justify-content:center; color:var(--text-dim); font-size:0.75rem;">${p.media && p.media[0] ? `<img src="${p.media[0].url}" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />` : 'Photo'}</div>
       <div class="post-title">${escapeHtml(p.title)}</div>
       <div class="post-user">@${p.profiles?.username || 'unknown'}</div>
       <div class="market-price">$${(p.price_cents/100).toFixed(0)}</div>
@@ -578,7 +629,7 @@ async function loadMarket() {
     const minNext = ((a.current_bid_cents || (a.starting_price_cents - a.min_increment_cents)) + a.min_increment_cents) / 100;
     return `
       <div class="market-card fade-item">
-        <div class="post-media" style="margin:-0.9rem -0.9rem 0.7rem;">${a.posts?.media && a.posts.media[0] ? `<img src="${a.posts.media[0].url}" loading="lazy" />` : 'Photo'}</div>
+        <div class="post-media" style="margin:-0.9rem -0.9rem 0.7rem; height:180px; background:linear-gradient(135deg,#24242a,#17171b); border-radius:12px 12px 0 0; overflow:hidden; display:flex; align-items:center; justify-content:center; color:var(--text-dim); font-size:0.75rem;">${a.posts?.media && a.posts.media[0] ? `<img src="${a.posts.media[0].url}" loading="lazy" style="width:100%;height:100%;object-fit:cover;" />` : 'Photo'}</div>
         <div class="post-title">${escapeHtml(a.posts?.title || 'Item')}</div>
         <div class="post-user">@${a.seller?.username || 'unknown'} · <span class="auction-timer ${timer.urgent ? 'urgent' : ''}">⏱ ${timer.text}</span></div>
         <div class="market-price">$${(current/100).toFixed(0)} <span style="font-size:0.7rem;color:var(--text-dim);font-weight:600;">current bid</span></div>
